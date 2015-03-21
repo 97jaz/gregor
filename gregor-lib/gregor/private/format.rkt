@@ -2,12 +2,13 @@
 
 (require racket/contract/base
          racket/set
-         cldr/locale
+         cldr/core
+         cldr/likely-subtags
          "generics.rkt"
          "pattern/ast.rkt"
          "pattern/lexer.rkt")
 
-(define (~t t pattern #:locale [locale (current-cldr-locale-path)])
+(define (~t t pattern #:locale [locale (current-locale)])
   (define xs (pattern->ast-list pattern))
   (define required
     (for*/set ([x (in-list xs)]
@@ -23,7 +24,8 @@
                                t
                                pattern)]
         [else
-         (define fragments (for/list ([x (in-list xs)]) (ast-fmt x t locale)))
+         (define cldr-locale (locale->available-cldr-locale locale modern-locale?))
+         (define fragments (for/list ([x (in-list xs)]) (ast-fmt x t cldr-locale)))
          (apply string-append fragments)]))
 
 (provide/contract

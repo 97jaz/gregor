@@ -1,6 +1,6 @@
 #lang racket/base
 
-(require cldr/bcp47
+(require cldr/bcp47/timezone
          tzinfo
          "../../generics.rkt"
          "../ast.rkt"
@@ -14,13 +14,12 @@
   (or (->tzid t) "Etc/Unknown"))
 
 (define zone-short-id
-  (compose1 bcp47-timezone-id
-            olson-id->bcp47-timezone
+  (compose1 tzid->bcp47-timezone-id
             zone-long-id))
 
 (define (zone-short-id-parse ast state ci?)
   (define (update str fs id)
-    (define olson (bcp47-timezone-id->olson-id id))
+    (define olson (bcp47-timezone-id->tzid id))
        
     (if (tzid-exists? olson)
         (parse-state str

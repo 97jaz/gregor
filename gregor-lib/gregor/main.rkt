@@ -27,17 +27,20 @@
        (#:resolve-offset [resolve offset-resolver/c])
        [r date-provider?]))
 
+;; exceptions
+(provide (struct-out exn:gregor)
+         (struct-out exn:gregor:invalid-offset)
+         (struct-out exn:gregor:invalid-pattern)
+         (struct-out exn:gregor:parse))
+
 (provide/contract
- ;; exceptions
- [exn:gregor:invalid-offset?  (-> any/c boolean?)]
- [exn:gregor:invalid-pattern? (-> any/c boolean?)]
- [exn:gregor:parse?           (-> any/c boolean?)]
- 
+  
  ;; date
  [date            (->i ([year exact-integer?])
                        ([month (integer-in 1 12)]
                         [day (year month) (day-of-month/c year month)])
                        [d date?])]
+ [jdn->date       (-> exact-integer? date?)]
  [date?           (-> any/c boolean?)]
  [date->iso8601   (-> date? string?)]
  
@@ -57,6 +60,8 @@
                            [second (integer-in 0 59)]
                            [nanosecond (integer-in 0 (sub1 NS/SECOND))])
                           [dt datetime?])]
+ [jd->datetime       (-> real? datetime?)]
+ [posix->datetime    (-> real? datetime?)]
  [datetime?          (-> any/c boolean?)]
  [datetime->iso8601  (-> datetime? string?)]
  [datetime=?         (-> datetime? datetime? boolean?)]
@@ -67,26 +72,26 @@
  [datetime-order     order?]
 
  ;; moment
- [moment             (->i ([year exact-integer?])
-                          ([month (integer-in 1 12)]
-                           [day (year month) (day-of-month/c year month)]
-                           [hour (integer-in 0 23)]
-                           [minute (integer-in 0 59)]
-                           [second (integer-in 0 59)]
-                           [nanosecond (integer-in 0 (sub1 NS/SECOND))]
-                           #:tz [tz tz/c]
-                           #:resolve-offset [resolve offset-resolver/c])
-                          [res moment?])]
- [moment?            (-> any/c boolean?)]
- [moment->iso8601    (-> moment? string?)]
- [moment->string     (-> moment? string?)]
- [moment=?           (-> moment? moment? boolean?)]
- [moment<?           (-> moment? moment? boolean?)]
- [moment<=?          (-> moment? moment? boolean?)]
- [moment>?           (-> moment? moment? boolean?)]
- [moment>=?          (-> moment? moment? boolean?)]
- [moment-order       order?]
- [UTC                tz/c]
+ [moment               (->i ([year exact-integer?])
+                            ([month (integer-in 1 12)]
+                             [day (year month) (day-of-month/c year month)]
+                             [hour (integer-in 0 23)]
+                             [minute (integer-in 0 59)]
+                             [second (integer-in 0 59)]
+                             [nanosecond (integer-in 0 (sub1 NS/SECOND))]
+                             #:tz [tz tz/c]
+                             #:resolve-offset [resolve offset-resolver/c])
+                            [res moment?])]
+ [moment?              (-> any/c boolean?)]
+ [moment->iso8601      (-> moment? string?)]
+ [moment->iso8601/tzid (-> moment? string?)]
+ [moment=?             (-> moment? moment? boolean?)]
+ [moment<?             (-> moment? moment? boolean?)]
+ [moment<=?            (-> moment? moment? boolean?)]
+ [moment>?             (-> moment? moment? boolean?)]
+ [moment>=?            (-> moment? moment? boolean?)]
+ [moment-order         order?]
+ [UTC                  tz/c]
 
   ;; date generics
  [date-provider?     (-> any/c boolean?)]

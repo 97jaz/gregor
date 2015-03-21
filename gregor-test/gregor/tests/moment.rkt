@@ -35,8 +35,8 @@
      (check-equal? (moment->iso8601 (moment 1969 12 31 19 #:tz "America/New_York"))
                    "1969-12-31T19:00:00-05:00"))
 
-   (test-case "moment->string"
-     (check-equal? (moment->string (moment 1969 12 31 19 #:tz "America/New_York"))
+   (test-case "moment->iso8601/tzid"
+     (check-equal? (moment->iso8601/tzid (moment 1969 12 31 19 #:tz "America/New_York"))
                    "1969-12-31T19:00:00-05:00[America/New_York]"))
 
    (test-suite "moment order"

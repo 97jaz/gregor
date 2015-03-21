@@ -2,7 +2,8 @@
 
 (require racket/match
          racket/string
-         cldr/database
+         cldr/core
+         cldr/dates-modern
          "../../generics.rkt"
          "iso-offset.rkt"
          "numbers.rkt")

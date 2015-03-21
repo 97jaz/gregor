@@ -1,7 +1,9 @@
 #lang racket/base
 
 (require racket/match
-         cldr/database
+         cldr/core
+         cldr/dates-modern
+         cldr/numbers-modern
          "../ast.rkt"
          "../parse-state.rkt"
          "trie.rkt")

@@ -1,8 +1,8 @@
 #lang racket/base
 
 (require racket/match
-         cldr/database
-         cldr/locale
+         cldr/core
+         cldr/likely-subtags
          "../../generics.rkt"
          "../../core/math.rkt")
 

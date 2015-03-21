@@ -1,8 +1,9 @@
 #lang racket/base
 
 (require memoize
-         cldr/database
-         cldr/bcp47
+         cldr/core
+         cldr/dates-modern
+         cldr/bcp47/timezone
          tzinfo
          "trie.rkt")
 

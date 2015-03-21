@@ -1,7 +1,8 @@
 #lang racket/base
 
-(require cldr/database
-         cldr/locale
+(require cldr/core
+         cldr/dates-modern
+         cldr/likely-subtags
          tzinfo
          "../../generics.rkt"
          "gmt-offset.rkt"

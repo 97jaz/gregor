@@ -1,8 +1,8 @@
 #lang racket/base
 
 (require racket/list
-         cldr/database
-         cldr/bcp47
+         cldr/core
+         cldr/dates-modern
          tzinfo
          "../../generics.rkt"
          "zone-util.rkt"

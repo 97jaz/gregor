@@ -2,8 +2,10 @@
 
 (require racket/string
          memoize
-         cldr/bcp47
-         cldr/database)
+         cldr/core
+         cldr/bcp47/timezone
+         cldr/localenames-modern
+         cldr/dates-modern)
 
 (provide (all-defined-out))
 
@@ -23,4 +25,4 @@
 
 (define/memo* (canonical-tzid tzid)
   (and (string? tzid)
-       (bcp47-canonical-olson-id tzid)))
+       (bcp47-canonical-tzid tzid)))

@@ -47,14 +47,15 @@
   (jd->posix (datetime->jd dt)))
 
 (define (posix->datetime posix)
-  (jd->datetime (posix->jd posix)))
+  (jd->datetime (posix->jd (inexact->exact posix))))
 
 (define (date+time->datetime d t)
   (DateTime d t (date+time->jd d t)))
 
 (define (jd->datetime jd)
-  (define-values (d t) (jd->date+time jd))
-  (DateTime d t jd))
+  (define ejd (inexact->exact jd))
+  (define-values (d t) (jd->date+time ejd))
+  (DateTime d t ejd))
 
 (define (datetime year [month 1] [day 1] [hour 0] [minute 0] [second 0] [nano 0])
   (date+time->datetime (date year month day)
@@ -136,8 +137,8 @@
  [datetime->jd             (-> datetime? rational?)]
  [datetime->posix          (-> datetime? rational?)]
  [date+time->datetime      (-> date? time? datetime?)]
- [jd->datetime             (-> rational? datetime?)]
- [posix->datetime          (-> rational? datetime?)]
+ [jd->datetime             (-> real? datetime?)]
+ [posix->datetime          (-> real? datetime?)]
  [datetime->iso8601        (-> datetime? string?)]
  [datetime-add-nanoseconds (-> datetime? exact-integer? datetime?)]
  [datetime-add-seconds     (-> datetime? exact-integer? datetime?)]

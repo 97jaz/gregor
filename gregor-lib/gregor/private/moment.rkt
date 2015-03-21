@@ -24,10 +24,10 @@
          (define res (local-seconds->tzoffset zone (datetime->posix dt)))
          
          (match res
-           [(tzoffset sec _ _) (Moment dt sec zone)]
+           [(tzoffset sec _ _) (make-moment dt sec zone)]
            [_                  (resolve res dt zone #f)])]
         [else
-         (Moment dt zone #f)]))
+         (make-moment dt zone #f)]))
 
 
 (define moment->datetime/local Moment-datetime/local)
@@ -58,7 +58,7 @@
     (cond [(string? z) (tzoffset-utc-seconds (utc-seconds->tzoffset z p))]
           [else        z]))
   (define dt (posix->datetime (+ p off)))
-  (Moment dt off z))
+  (make-moment dt off z))
 
 (define (moment-add-nanoseconds m n)
   (posix->moment (+ (moment->posix m) (* n (/ 1 NS/SECOND)))
@@ -72,10 +72,10 @@
          (define posix (datetime->posix dt/utc))
          (match-define (tzoffset offset _ _) (utc-seconds->tzoffset z posix))
          (define local (datetime-add-seconds dt/utc offset))
-         (Moment local offset z)]
+         (make-moment local offset z)]
         [else
          (define local (datetime-add-seconds dt/utc z))
-         (Moment local z #f)]))
+         (make-moment local z #f)]))
 
 
 (define (timezone-coerce m z #:resolve-offset [resolve resolve-offset/raise])
@@ -86,7 +86,8 @@
 
 (define UTC "Etc/UTC")
 
-(define tz/c (or/c string? (integer-in -64800 64800)))
+(define tz/c (or/c string?
+                   (integer-in -64800 64800)))
 
 (provide tz/c)
 
@@ -105,7 +106,7 @@
                               [res moment?])]
  [datetime+tz->moment    (-> datetime? tz/c offset-resolver/c moment?)]
  [moment->iso8601        (-> moment? string?)]
- [moment->string         (-> moment? string?)]
+ [moment->iso8601/tzid   (-> moment? string?)]
  [moment->datetime/local (-> moment? datetime?)]
  [moment->utc-offset     (-> moment? exact-integer?)]
  [moment->timezone       (-> moment? tz/c)]

@@ -46,7 +46,7 @@
     [(Year _ 'normal 2)   (parse/two (parse-state/ year/era))]
     [(Year _ 'normal n)   (parse/era n)]
     [(Year _ 'week 2)     (parse/two parse-state/ignore)]
-    [(Year _ 'week n)     (num-parse loc state parse-state/ignore #:min n)]
+    [(Year _ 'week n)     (num-parse ast loc state parse-state/ignore #:min n)]
     [(Year _ 'ext n)      (parse/ext n)]
     [(Year _ 'cyclic _)   (parse/era 1)]
     [(Year _ 'related n)  (parse/ext n)]))

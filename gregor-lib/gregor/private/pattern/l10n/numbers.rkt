@@ -2,7 +2,8 @@
 
 (require racket/format
          racket/match
-         cldr/database
+         cldr/core
+         cldr/numbers-modern
          memoize
          "../ast.rkt"
          "../parse-state.rkt")

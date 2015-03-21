@@ -2,7 +2,8 @@
 
 (require racket/contract/base
          racket/match
-         cldr/locale
+         cldr/core
+         cldr/likely-subtags
          "date.rkt"
          "datetime.rkt"
          "exn.rkt"
@@ -19,16 +20,16 @@
                         ci?
                         locale
                         make-temporal)
+  (define cldr-locale (locale->available-cldr-locale locale modern-locale?))
   (define initial-state (parse-state input (fresh-fields)))
   (define xs (pattern->ast-list pattern))
 
   (match-define (parse-state remaining-input fields)
     (for/fold ([s initial-state]) ([x (in-list xs)])
-      (ast-parse x s ci? locale)))
+      (ast-parse x s ci? cldr-locale)))
 
   (cond [(zero? (string-length remaining-input))
-         (make-temporal
-          (fields->datetime+tz fields err))]
+         (make-temporal fields)]
         [else
          (err "Unable to match pattern [~a] against input [~a]"
               pattern input)]))
@@ -36,31 +37,38 @@
 (define (parse-moment input
                       pattern
                       #:ci? [ci? #t]
-                      #:locale [locale (current-cldr-locale-path)]
+                      #:locale [locale (current-locale)]
                       #:resolve-offset [resolve resolve-offset/raise])
   (parse-temporal input pattern ci? locale
-                  (match-lambda [(cons dt tz) (datetime+tz->moment dt tz resolve)])))
+                  (λ (fields)
+                    (match (fields->datetime+tz fields err)
+                      [(cons dt tz) (datetime+tz->moment dt tz resolve)]))))
 
 (define (parse-datetime input
                         pattern
                         #:ci? [ci? #t]
-                        #:locale [locale (current-cldr-locale-path)])
+                        #:locale [locale (current-locale)])
   (parse-temporal input pattern ci? locale
-                  (match-lambda [(cons dt _) dt])))
+                  (λ (fields)
+                  (match (fields->datetime+tz fields err)
+                    [(cons dt _) dt]))))
 
 (define (parse-date input
                     pattern
                     #:ci? [ci? #t]
-                    #:locale [locale (current-cldr-locale-path)])
+                    #:locale [locale (current-locale)])
   (parse-temporal input pattern ci? locale
-                  (match-lambda [(cons dt _) (datetime->date dt)])))
+                  (λ (fields)
+                  (match (fields->datetime+tz fields err)
+                    [(cons dt _) (datetime->date dt)]))))
 
 (define (parse-time input
                     pattern
                     #:ci? [ci? #t]
-                    #:locale [locale (current-cldr-locale-path)])
+                    #:locale [locale (current-locale)])
   (parse-temporal input pattern ci? locale
-                  (match-lambda [(cons dt _) (datetime->time dt)])))
+                  (λ (fields)
+                    (fields->time fields err))))
 
 (define (err fmt . args)
   (raise (exn:gregor:parse (apply format fmt args)

@@ -52,30 +52,30 @@
 
 (define (resolve-gap/pre gap target-dt target-tzid orig)
   (match-define (tzgap tm (tzoffset delta _ _) _) gap)
-  (Moment (posix->datetime (+ tm delta (- (/ 1 NS/SECOND)))) delta target-tzid))
+  (make-moment (posix->datetime (+ tm delta (- (/ 1 NS/SECOND)))) delta target-tzid))
 
 (define (resolve-gap/post gap target-dt target-tzid orig)
   (match-define (tzgap tm _ (tzoffset delta _ _)) gap)
-  (Moment (posix->datetime (+ tm delta)) delta target-tzid))
+  (make-moment (posix->datetime (+ tm delta)) delta target-tzid))
 
 (define (resolve-gap/push gap target-dt target-tzid orig)
   (match-define (tzgap tm (tzoffset delta1 _ _) (tzoffset delta2 _ _)) gap)
-  (Moment (posix->datetime (+ (datetime->posix target-dt) (- delta2 delta1))) delta2 target-tzid))
+  (make-moment (posix->datetime (+ (datetime->posix target-dt) (- delta2 delta1))) delta2 target-tzid))
 
 (define (resolve-overlap/pre overlap target-dt target-tzid orig)
   (match-define (tzoverlap (tzoffset delta _ _) _) overlap)
-  (Moment target-dt delta target-tzid))
+  (make-moment target-dt delta target-tzid))
 
 (define (resolve-overlap/post overlap target-dt target-tzid orig)
   (match-define (tzoverlap _ (tzoffset delta _ _)) overlap)
-  (Moment target-dt delta target-tzid))
+  (make-moment target-dt delta target-tzid))
                  
 (define (resolve-overlap/retain overlap target-dt target-tzid orig)
   (match-define (tzoverlap (tzoffset delta1 _ _) (tzoffset delta2 _ _)) overlap)
-  (Moment target-dt
-          (or (and orig (= (Moment-utc-offset orig) delta1) delta1)
-              delta2)
-          target-tzid))
+  (make-moment target-dt
+               (or (and orig (= (Moment-utc-offset orig) delta1) delta1)
+                   delta2)
+               target-tzid))
 
 (define (offset-resolver rg ro)
   (λ (g/o target-dt target-tzid orig)

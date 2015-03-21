@@ -43,6 +43,16 @@ Constructs a @racket[date] with the given @racket[year], @racket[month], and @ra
 Returns @racket[#t] if @racket[x] is a @racket[date]; @racket[#f] otherwise.
 }
 
+@defproc[(jdn->date [jdn exact-integer?]) date?]{
+Returns the @racket[date] corresponding to the given
+@link["http://en.wikipedia.org/wiki/Julian_day"]{Julian day number}, which is the
+number of solar days that have elapsed since 12:00 UT on November 24, 4714 BC in the
+proleptic Gregorian calendar.
+
+@examples[#:eval the-eval
+(jdn->date 0)
+(jdn->date 2440588)
+]}
 
 @defproc[(date->iso8601 [d date?]) string?]{
 Returns an ISO 8601 string representation of @racket[d].

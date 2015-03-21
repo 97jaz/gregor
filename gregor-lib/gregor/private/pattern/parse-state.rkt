@@ -22,7 +22,7 @@
   #:transparent)
 
 (define (fresh-fields)
-  (fields 1 #f #f #f #f #f #f #f #f #f #f))
+  (fields 1 #f #f #f 'am #f #f #f #f #f #f))
 
 (define (set-fields-year/ext fs y)
   (cond [(positive? y)
@@ -57,3 +57,9 @@
                   (or second 0)
                   (or nano 0))
         (or tzid offset (current-timezone))))
+
+(define (fields->time fs err)
+  (match-define (cons dt _)
+    (fields->datetime+tz (struct-copy fields fs [era 1] [year/era 1970]) err))
+  
+  (datetime->time dt))

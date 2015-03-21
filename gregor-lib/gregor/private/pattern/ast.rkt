@@ -3,7 +3,6 @@
 (require racket/generic
          racket/list
          racket/match
-         cldr/database
          "parse-state.rkt"
          "../exn.rkt"
          "../generics.rkt")

@@ -2,7 +2,7 @@
 
 (require racket/match
          racket/string
-         cldr/database
+         cldr/core
          "../../datetime.rkt"
          "../../generics.rkt")
 

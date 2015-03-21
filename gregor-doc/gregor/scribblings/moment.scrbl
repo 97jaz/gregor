@@ -55,14 +55,14 @@ preserves the IANA time zone information.
 (moment->iso8601 (moment 1 2 3 4 5 6 7 #:tz "America/Los_Angeles"))
 ]}
 
-@defproc[(moment->string [m moment?]) string?]{
-Returns an string representation of @racket[m] comprising the ISO 8610
+@defproc[(moment->iso8601/tzid [m moment?]) string?]{
+Returns a string representation of @racket[m] comprising the ISO 8610
 representation plus the IANA time zone, if @racket[m] has one.
 
 @examples[#:eval the-eval
-(moment->string (moment 1970 #:tz "Etc/UTC"))
-(moment->string (moment 1969 7 21 2 56 #:tz 0))
-(moment->string (moment 1 2 3 4 5 6 7 #:tz "America/Los_Angeles"))
+(moment->iso8601/tzid (moment 1970 #:tz "Etc/UTC"))
+(moment->iso8601/tzid (moment 1969 7 21 2 56 #:tz 0))
+(moment->iso8601/tzid (moment 1 2 3 4 5 6 7 #:tz "America/Los_Angeles"))
 ]}
 
 @deftogether[(@defproc[(moment=? [x moment?] [y moment?]) boolean?]

@@ -23,9 +23,9 @@
 (define (moment-write-proc m out mode)
   (fprintf out
            "#<moment ~a>"
-           (moment->string m)))
+           (moment->iso8601/tzid m)))
 
-(define (moment->string m)
+(define (moment->iso8601/tzid m)
   (define iso (moment->iso8601 m))
   (match m
     [(Moment _ _ z) #:when z (format "~a[~a]" iso z)]
@@ -77,3 +77,5 @@
 
 (define moment? Moment?)
 
+(define (make-moment dt off z)
+  (Moment dt off (and z (string->immutable-string z))))

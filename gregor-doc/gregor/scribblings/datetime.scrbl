@@ -39,6 +39,27 @@ Constructs a @racket[datetime] with the given date and time fields.
 Returns @racket[#t] if @racket[x] is a @racket[datetime]; @racket[#f] otherwise.
 }
 
+@defproc[(jd->datetime [jd real?]) datetime?]{
+Returns the @racket[datetime] corresponding to the given
+@link["http://en.wikipedia.org/wiki/Julian_day"]{Julian day}, which is the number of
+solar days that have elapsed since 12:00 UT on November 24, 4714 BC in the
+proleptic Gregorian calendar.
+
+@examples[#:eval the-eval
+(jd->datetime 0)
+(jd->datetime 2440587.5)
+]}
+
+@defproc[(posix->datetime [posix real?]) datetime?]{
+Returns the @racket[datetime] corresponding to the given
+@link["http://en.wikipedia.org/wiki/Unix_time"]{POSIX time}, which is the number of
+seconds that have elapsed since 00:00 UTC on January 1, 1970.
+
+@examples[#:eval the-eval
+(posix->datetime 0)
+(posix->datetime 2147483648)
+]}
+
 @defproc[(datetime->iso8601 [dt datetime?]) string?]{
 Returns an ISO 8601 string representation of @racket[dt].
 
