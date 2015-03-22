@@ -4,7 +4,11 @@
 (define collection 'multi)
 (define deps '("base"
                "tzinfo"
-               "cldr"))
+               "cldr-core"
+               "cldr-bcp47"
+               "cldr-numbers-modern"
+               "cldr-dates-modern"
+               "cldr-localenames-modern"))
 
 (define pkg-desc "implementation (no documentation) of \"gregor\"")
 
