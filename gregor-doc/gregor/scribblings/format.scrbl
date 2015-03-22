@@ -35,6 +35,54 @@ is specified by CLDR.
 
 @section[#:tag "parsing"]{Parsing Dates and Times}
 
+@subsection[#:tag "iso-parsing"]{Parsing ISO 8601 representations}
+
+@defproc[(iso8601->date [str string?]) date?]{
+Parses an ISO 8601 representation of a date into a @racket[date]. Note that the input must
+use the ISO 8601 @emph{extended format}.
+
+@examples[#:eval the-eval
+(iso8601->date "1981-04-05")
+(iso8601->date "1981-04")
+]}
+
+@defproc[(iso8601->time [str string?]) date?]{
+Parses an ISO 8601 representation of a time into a @racket[time]. Note that the input must
+use the ISO 8601 @emph{extended format}.
+
+@examples[#:eval the-eval
+(iso8601->time "13:47:30")
+]}
+
+@defproc[(iso8601->datetime [str string?]) date?]{
+Parses an ISO 8601 combined date and time representation into a @racket[datetime]. Note that
+the input must use the ISO 8601 @emph{extended format}.
+
+@examples[#:eval the-eval
+(iso8601->datetime "2014-03-20T19:20:09.3045")
+]}
+
+@defproc[(iso8601->moment [str string?]) date?]{
+Parses an ISO 8601 combined date and time representation into a @racket[moment]. Note that
+the input must use the ISO 8601 @emph{extended format}.
+
+@examples[#:eval the-eval
+(iso8601->moment "2014-03-20T19:20:09.3045Z")
+]}
+
+@defproc[(iso8601/tzid->moment [str string?]) date?]{
+Parses a non-standard format, consisting of an ISO 8601 combined date and time representation
+and an IANA time zone ID in brackets, into a @racket[moment]. The input format is the same
+as that produced by @racket[moment->iso8601/tzid]. Note that the ISO 8601 portion of
+the input must use the ISO 8601 @emph{extended format}.
+
+@examples[#:eval the-eval
+(iso8601/tzid->moment "2014-03-20T19:20:09.3045-04:00[America/New_York]")
+]}
+
+
+@subsection[#:tag "pattern-parsing"]{Flexible parsing based on patterns}
+
 @defproc[(parse-date [str string?]
                      [pattern string?]
                      [#:ci? ci? boolean? #t]

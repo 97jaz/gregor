@@ -14,6 +14,7 @@
          "private/moment.rkt"
          "private/offset-resolvers.rkt"
          "private/parse.rkt"
+         "private/iso8601-parse.rkt"
          "private/time.rkt"
 
          "private/core/ymd.rkt"
@@ -216,6 +217,12 @@
                           [result string?])]
 
  ;; parse
+ [iso8601->date          (-> string? date?)]
+ [iso8601->time          (-> string? time?)]
+ [iso8601->datetime      (-> string? datetime?)]
+ [iso8601->moment        (-> string? moment?)]
+ [iso8601/tzid->moment   (-> string? moment?)]
+ 
  [current-two-digit-year-resolver (parameter/c (-> (integer-in -99 99) exact-integer?))]
  
  [parse-date         (->i ([input string?]

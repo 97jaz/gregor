@@ -8,6 +8,7 @@
          parser-tools/yacc
          "core/hmsn.rkt"
          "exn.rkt"
+         "generics.rkt"
          "date.rkt"
          "time.rkt"
          "datetime.rkt"
@@ -24,18 +25,21 @@
 (define-tokens data-tokens (YEAR D2 FRACTION TZID))
 (define-empty-tokens empty-tokens (DASH PLUS COLON T Z EOF))
 
-(match-define (list parse-iso8601-date
-                    parse-iso8601-time
-                    parse-iso8601-datetime
-                    parse-iso8601-moment
-                    parse-iso8601/tzid-moment)
+(define parse-temporal
   (parser
    [tokens data-tokens empty-tokens]
    [error (λ (tok-ok? tok-name tok-value)
             (raise-iso8601-parse-error))]
-   [start date time datetime moment moment/ext]
+   [start temporal]
    [end EOF]
    [grammar
+    (temporal
+     [(moment/ext) $1]
+     [(moment)     $1]
+     [(datetime)   $1]
+     [(time)       $1]
+     [(date)       $1])
+    
     (date
      [(optsign YEAR DASH month DASH day)  (date ($1 $2) $4 $6)]
      [(optsign YEAR DASH month)           (date ($1 $2) $4)]
@@ -48,13 +52,12 @@
      [(hour COLON min COLON sec fraction) (time $1 $3 $5 $6)])
 
     (datetime
-     [(date T time) (date+time->datetime $1 $3)])
+     [(date T time)                       (date+time->datetime $1 $3)])
 
     (moment
      [(datetime offset)      (datetime+tz->moment $1 $2 resolve-offset/raise)])
 
     (moment/ext
-     [(datetime offset)      (datetime+tz->moment $1 $2 resolve-offset/raise)]
      [(datetime offset TZID) (datetime+tz->moment $1 $3 resolve-offset/raise)])
 
     (offset
@@ -88,16 +91,21 @@
     (fraction
      [(FRACTION) (exact-floor (* $1 NS/SECOND))])]))
 
-(define (make-parser p)
+(define (make-parser kind p? xform)
   (λ (str)
     (define in (open-input-string str))
-    (p (λ () (scan in)))))
+    (define t (parse-temporal (λ () (scan in))))
 
-(define iso8601->date        (make-parser parse-iso8601-date))
-(define iso8601->time        (make-parser parse-iso8601-time))
-(define iso8601->datetime    (make-parser parse-iso8601-datetime))
-(define iso8601->moment      (make-parser parse-iso8601-moment))
-(define iso8601/tzid->moment (make-parser parse-iso8601/tzid-moment))
+    (if (p? t)
+        (xform t)
+        (raise-iso8601-parse-error
+         (format "Unable to parse string as a ~a" kind)))))
+
+(define iso8601->date        (make-parser 'date date-provider? ->date))
+(define iso8601->time        (make-parser 'time time-provider? ->time))
+(define iso8601->datetime    (make-parser 'datetime datetime-provider? ->datetime/local))
+(define iso8601->moment      (make-parser 'moment moment-provider? ->moment))
+(define iso8601/tzid->moment (make-parser 'moment/tzid tzid-provider? ->moment))
 
 (define (guard val ok?)
   (if (ok? val)
@@ -132,7 +140,7 @@
 
 (define-lex-abbrev digit (:/ #\0 #\9))
 
-(define (raise-iso8601-parse-error)
+(define (raise-iso8601-parse-error [msg "Unable to parse input as an ISO 8601 string"])
   (raise
-   (exn:gregor:parse "Unable to parse input as an ISO 8601 string"
+   (exn:gregor:parse msg
                      (current-continuation-marks))))
