@@ -38,7 +38,7 @@ Constructs a @racket[time] with the given @racket[hour], @racket[minute],
 
 Note the contract on @racket[second]; a @racket[time] is unable to represent
 times that fall on added UTC leap-seconds. For a discussion of Gregor's
-relationship to UTC, see @secref["gregor-and-utc"].
+relationship to UTC, see @secref["time-scale"].
 
 @examples[#:eval the-eval
 (time 1 2 3 4)
