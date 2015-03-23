@@ -3,6 +3,7 @@
 
 (define collection 'multi)
 (define deps '("base"
+               "memoize"
                "tzinfo"
                "cldr-core"
                "cldr-bcp47"
