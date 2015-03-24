@@ -10,6 +10,7 @@
                "cldr-numbers-modern"
                "cldr-dates-modern"
                "cldr-localenames-modern"))
+(define build-deps '("racket-doc" "scribble-lib"))
 
 (define pkg-desc "implementation (no documentation) of \"gregor\"")
 
