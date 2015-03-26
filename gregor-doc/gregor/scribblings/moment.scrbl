@@ -46,7 +46,7 @@ Returns @racket[#t] if @racket[x] is a @racket[moment]; @racket[#f] otherwise.
 @defproc[(moment->iso8601 [m moment?]) string?]{
 Returns an ISO 8601 string representation of @racket[m]. Since ISO 8601
 doesn't support IANA time zones, that data is discarded; only the UTC offset
-is used in the result. See @racket[moment->string] for a function that
+is used in the result. See @racket[moment->iso8601/tzid] for a function that
 preserves the IANA time zone information.
 
 @examples[#:eval the-eval

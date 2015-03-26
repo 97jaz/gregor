@@ -36,9 +36,8 @@ Returns the UTC offset of @racket[t] in seconds.
 ]}
 
 @defproc[(->timezone [t moment-provider?]) tz/c]{
-Returns the time zone component of @racket[t]. If the time zone has an IANA ID,
-it is returned. If the time zone is onlt a UTC offset, however, then the offset
-if returned.
+Returns the time zone component of @racket[t], whether it is an IANA ID
+or a UTC offset.
 
 @examples[#:eval the-eval
 (->timezone (moment 1970 #:tz "Etc/UTC"))
@@ -47,9 +46,8 @@ if returned.
 ]}
 
 @defproc[(->tzid [t moment-provider?]) (or/c string? false/c)]{
-Returns the time zone component of @racket[t]. If the time zone has an IANA ID,
-it is returned. If the time zone is onlt a UTC offset, however, then the offset
-if returned.
+Returns the time zone component of @racket[t] only if it is an IANA ID. If it is
+a UTC offset, @racket[#f] is returned.
 
 @examples[#:eval the-eval
 (->tzid (moment 1970 #:tz "Etc/UTC"))
