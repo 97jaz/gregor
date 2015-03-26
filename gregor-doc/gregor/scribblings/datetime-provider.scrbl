@@ -60,7 +60,7 @@ and @racket[t], expressed as a rational number.
 ]}
 
 @defproc[(->jd [t datetime-provider?]) rational?]{
-Returns the number of days since the Julian epoch (UTC noon on November 24, 4714 BCE
+Returns the number of days since the Julian epoch (noon on November 24, 4714 BCE
 in the proleptic Gregorian calendar), expressed as a rational number.
 
 @examples[#:eval the-eval
