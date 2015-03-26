@@ -237,7 +237,7 @@ UTC offset in effect after the overlap.
                                  [tzid string?]
                                  [orig (or/c moment? #f)])
          moment?]{
-If @racket[origin] is a @racket[moment] and its UTC offset is one of the ones involved
+If @racket[orig] is a @racket[moment] and its UTC offset is one of the ones involved
 in the given @racket[overlap], then the result will use that offset. Otherwise, this
 function behaves the same as @racket[resolve-overlap/post].
 }
