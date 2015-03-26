@@ -19,7 +19,7 @@
              [pattern string?]
              [#:locale locale string? (current-locale)])
          string?]{
-Formats @racket[t] using the specified @racket[pattern]. The
+Formats @racket[t] using the given @racket[pattern]. The
 @link["http://unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table"]{pattern syntax}
 is specified by CLDR.
 
