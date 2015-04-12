@@ -7,7 +7,6 @@
          "private/clock.rkt"
          "private/date.rkt"
          "private/datetime.rkt"
-         "private/duration-between.rkt"
          "private/exn.rkt"
          "private/format.rkt"
          "private/generics.rkt"
@@ -16,6 +15,7 @@
          "private/parse.rkt"
          "private/iso8601-parse.rkt"
          "private/time.rkt"
+         "private/period.rkt"
 
          "private/core/ymd.rkt"
          "private/core/hmsn.rkt"
@@ -23,10 +23,28 @@
          "private/pattern/ast/year.rkt")
 
 (define date-arith/c
-  (->i ([d date-provider?]
+  (->i ([d date-arithmetic-provider?]
         [n exact-integer?])
        (#:resolve-offset [resolve offset-resolver/c])
-       [r date-provider?]))
+       [r date-arithmetic-provider?]))
+
+(define date-period-arith/c
+  (->i ([d date-arithmetic-provider?]
+        [p date-period?])
+       (#:resolve-offset [resolve offset-resolver/c])
+       [r date-arithmetic-provider?]))
+
+(define time-arith/c
+  (-> time-arithmetic-provider? exact-integer? time-arithmetic-provider?))
+
+(define time-period-arith/c
+  (-> time-arithmetic-provider? time-period? time-arithmetic-provider?))
+
+(define datetime-period-arith/c
+  (->i ([d datetime-arithmetic-provider?]
+        [p period?])
+       (#:resolve-offset [resolve offset-resolver/c])
+       [r datetime-arithmetic-provider?]))
 
 ;; exceptions
 (provide (struct-out exn:gregor)
@@ -109,15 +127,6 @@
  [->iso-wyear        (-> date-provider? exact-integer?)]
  [->iso-wday         (-> date-provider? (integer-in 1 7))]
 
- [+years             date-arith/c]
- [+months            date-arith/c]
- [+weeks             date-arith/c]
- [+days              date-arith/c]
- [-years             date-arith/c]
- [-months            date-arith/c]
- [-weeks             date-arith/c]
- [-days              date-arith/c]
-
  [sunday?            (-> date-provider? boolean?)]
  [monday?            (-> date-provider? boolean?)]
  [tuesday?           (-> date-provider? boolean?)]
@@ -137,6 +146,20 @@
                           (#:resolve-offset [resolve offset-resolver/c])
                           [result datetime-provider?])]
 
+ [date-arithmetic-provider? (-> any/c boolean?)]
+
+ [+years             date-arith/c]
+ [+months            date-arith/c]
+ [+weeks             date-arith/c]
+ [+days              date-arith/c]
+ [-years             date-arith/c]
+ [-months            date-arith/c]
+ [-weeks             date-arith/c]
+ [-days              date-arith/c]
+
+ [+date-period       date-period-arith/c]
+ [-date-period       date-period-arith/c]
+
  ;; time generics
  [time-provider?     (-> any/c boolean?)]
 
@@ -148,24 +171,29 @@
  [->microseconds     (-> time-provider? (integer-in 0 999999))]
  [->nanoseconds      (-> time-provider? (integer-in 0 999999999))]
 
- [+hours             (-> time-provider? exact-integer? time-provider?)]
- [+minutes           (-> time-provider? exact-integer? time-provider?)]
- [+seconds           (-> time-provider? exact-integer? time-provider?)]
- [+milliseconds      (-> time-provider? exact-integer? time-provider?)]
- [+microseconds      (-> time-provider? exact-integer? time-provider?)]
- [+nanoseconds       (-> time-provider? exact-integer? time-provider?)]
-
- [-hours             (-> time-provider? exact-integer? time-provider?)]
- [-minutes           (-> time-provider? exact-integer? time-provider?)]
- [-seconds           (-> time-provider? exact-integer? time-provider?)]
- [-milliseconds      (-> time-provider? exact-integer? time-provider?)]
- [-microseconds      (-> time-provider? exact-integer? time-provider?)]
- [-nanoseconds       (-> time-provider? exact-integer? time-provider?)]
-
  [on-date            (->i ([t time-provider?]
                            [d date-provider?])
                           (#:resolve-offset [resolve offset-resolver/c])
                           [result datetime-provider?])]
+
+ [time-arithmetic-provider? (-> any/c boolean?)]
+
+ [+hours             time-arith/c]
+ [+minutes           time-arith/c]
+ [+seconds           time-arith/c]
+ [+milliseconds      time-arith/c]
+ [+microseconds      time-arith/c]
+ [+nanoseconds       time-arith/c]
+
+ [-hours             time-arith/c]
+ [-minutes           time-arith/c]
+ [-seconds           time-arith/c]
+ [-milliseconds      time-arith/c]
+ [-microseconds      time-arith/c]
+ [-nanoseconds       time-arith/c]
+
+ [+time-period       time-period-arith/c]
+ [-time-period       time-period-arith/c]
 
  ;; datetime generics
  [datetime-provider? (-> any/c boolean?)]
@@ -186,17 +214,15 @@
  [microseconds-between (-> datetime-provider? datetime-provider? exact-integer?)]
  [nanoseconds-between  (-> datetime-provider? datetime-provider? exact-integer?)]
 
- [duration-between     (-> datetime-provider?
-                           datetime-provider?
-                           (listof temporal-unit/c)
-                           (cons/c (cons/c 'sign (symbols '+ '-))
-                                   (listof (cons/c (or/c 'sign temporal-unit/c)
-                                                   exact-integer?))))]
-
  [with-timezone        (->i ([t datetime-provider?]
                              [tz tz/c])
                             (#:resolve-offset [resolve-offset offset-resolver/c])
                             [m moment-provider?])]
+
+ [datetime-arithmetic-provider? (-> any/c boolean?)]
+
+ [+period            datetime-period-arith/c]
+ [-period            datetime-period-arith/c]
 
  ;; moment generics
  [tz/c               any/c]

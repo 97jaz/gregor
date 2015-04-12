@@ -37,3 +37,10 @@
                            "E.g., '~a'.")
             pat pat)
     (current-continuation-marks))))
+
+(define (raise-bug name fmt . xs)
+  (define msg (apply format fmt xs))
+  (error (format (string-append "BUG in ~a:\n\t~a\n"
+                                "\tPlease report this bug at https://github.com/97jaz/gregor/issues\n")
+                 name
+                 msg)))

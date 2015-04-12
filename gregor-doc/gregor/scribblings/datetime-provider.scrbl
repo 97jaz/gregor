@@ -111,25 +111,6 @@ is 365 or 366 days.
 (nanoseconds-between (datetime 2000) (datetime 2000 1 2))
 ]}
 
-@defproc[(duration-between [t1 datetime-provider?]
-                           [t2 datetime-provider?]
-                           [units (listof temporal-unit/c)])
-         (cons/c (cons/c 'sign (symbols '+ '-))
-                 (listof (cons/c temporal-unit/c
-                                 exact-integer?)))]{
-Computes the duration between the given date providers in terms of the requested
-units. The durations for larger units are computed before those for smaller ones.
-
-@examples[#:eval the-eval
-(duration-between (date 1959 5 22)
-                  (date 1980 1 18)
-                  '(years months days))
-
-(duration-between (datetime 1970)
-                  (datetime 2015 3 15 23 36 17)
-                  '(years months days hours minutes seconds))
-]}
-
 @defproc[(with-timezone [t datetime-provider?]
                         [tz tz/c]
                         [#:resolve-offset resolve-offset offset-resolver/c])
