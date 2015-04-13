@@ -59,7 +59,11 @@
      (check-equal? (days-between (datetime 2000) (datetime 2001)) 366)
      (check-equal? (days-between (moment 2000 3 1 #:tz "Etc/UTC")
                                  (moment 2000 2 28 #:tz "Etc/UTC"))
-                   -2))
+                   -2)
+     ;; https://github.com/97jaz/gregor/issues/2
+     (check-equal? (days-between (moment 2015 3 29 #:tz "Europe/Berlin")
+                                 (moment 2015 3 30 #:tz "Europe/Berlin"))
+                   1))
 
    (test-case "hours-between"
      (check-equal? (hours-between (datetime 2000) (datetime 2000 1 1 13 59)) 13)
