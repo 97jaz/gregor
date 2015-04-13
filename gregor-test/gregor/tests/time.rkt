@@ -3,6 +3,7 @@
 (require rackunit
          rackunit/text-ui
          racket/serialize
+         gregor
          gregor/time)
 
 (run-tests
@@ -32,7 +33,10 @@
          (check-false (equal? (time 12) (deserialize (serialize t3)))))))
 
    (test-case "time->iso8601"
-     (check-equal? (time->iso8601 (time 12 45 3 1234)) "12:45:03.000001234"))
+     (check-equal? (time->iso8601 (time 12 45 3 1234)) "12:45:03.000001234")
+
+     (let ([t (time 1 56 43 386282959)])
+       (check-equal? (iso8601->time (time->iso8601 t)) t)))
 
    (test-suite "time order"
      (let* ([t1 (time 0)]

@@ -33,7 +33,10 @@
 
    (test-case "datetime->iso8601"
      (check-equal? (datetime->iso8601 (datetime 1969 7 21 2 56 20 1234))
-                   "1969-07-21T02:56:20.000001234"))
+                   "1969-07-21T02:56:20.000001234")
+
+     (let ([dt (datetime 2015 4 13 1 59 30 696210938)])
+       (check-equal? (iso8601->datetime (datetime->iso8601 dt)) dt)))
 
    (test-suite "datetime order"
      (let* ([t1 (datetime 0)]
