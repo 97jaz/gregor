@@ -25,3 +25,23 @@
        (check-equal? (now/moment/utc) (moment 1970 1 1 0 0 1 #:tz UTC))
        (check-equal? (now/moment #:tz "America/Chicago")
                      (moment 1969 12 31 18 0 1 #:tz "America/Chicago"))))))
+
+;; https://github.com/97jaz/gregor/issues/3
+(run-tests
+ (test-suite "[round-trip ISO 8601 with clock functions]"
+   (parameterize ([current-clock (λ () 1463207954418177/1024000)])
+     (test-case "today"
+       (let ([d (today)])
+         (check-equal? d (iso8601->date (date->iso8601 d)))))
+
+     (test-case "current-time"
+       (let ([t (current-time)])
+         (check-equal? t (iso8601->time (time->iso8601 t)))))
+
+     (test-case "now"
+       (let ([n (now)])
+         (check-equal? n (iso8601->datetime (datetime->iso8601 n)))))
+
+     (test-case "now/moment"
+       (let ([n (now/moment)])
+         (check-equal? n (iso8601/tzid->moment (moment->iso8601/tzid n))))))))

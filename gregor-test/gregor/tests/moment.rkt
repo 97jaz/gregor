@@ -33,11 +33,17 @@
 
    (test-case "moment->iso8601"
      (check-equal? (moment->iso8601 (moment 1969 12 31 19 #:tz "America/New_York"))
-                   "1969-12-31T19:00:00-05:00"))
+                   "1969-12-31T19:00:00-05:00")
+
+     (let ([m (moment 2015 4 12 22 6 33 8026521 #:tz -14400)])
+       (check-equal? (iso8601->moment (moment->iso8601 m)) m)))
 
    (test-case "moment->iso8601/tzid"
      (check-equal? (moment->iso8601/tzid (moment 1969 12 31 19 #:tz "America/New_York"))
-                   "1969-12-31T19:00:00-05:00[America/New_York]"))
+                   "1969-12-31T19:00:00-05:00[America/New_York]")
+
+     (let ([m (moment 2015 4 12 22 6 33 8026521 #:tz "America/New_York")])
+       (check-equal? (iso8601/tzid->moment (moment->iso8601/tzid m)) m)))
 
    (test-suite "moment order"
      (let* ([t1 (moment -1000)]

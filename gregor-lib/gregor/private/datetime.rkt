@@ -26,10 +26,10 @@
   [(define equal-proc datetime-equal-proc)
    (define hash-proc  datetime-hash-proc)
    (define hash2-proc datetime-hash-proc)]
-  
+
   #:methods gen:custom-write
   [(define write-proc datetime-write-proc)]
-  
+
   #:property prop:serializable
   (make-serialize-info (λ (dt) (vector (datetime->jd dt)))
                        #'deserialize-info:DateTime
@@ -55,7 +55,7 @@
 (define (jd->datetime jd)
   (define ejd (inexact->exact jd))
   (define-values (d t) (jd->date+time ejd))
-  (DateTime d t ejd))
+  (date+time->datetime d t))
 
 (define (datetime year [month 1] [day 1] [hour 0] [minute 0] [second 0] [nano 0])
   (date+time->datetime (date year month day)
@@ -81,7 +81,7 @@
 (define (date+time->jd d t)
   (define jdn    (date->jdn d))
   (define day-ns (time->ns t))
-  
+
   (+ (- jdn 1/2)
      (/ day-ns NS/DAY)))
 
@@ -90,7 +90,7 @@
   (define d      (jdn->date jdn))
   (define day-ns (jd->day-ns jd))
   (define t      (day-ns->time day-ns))
-  
+
   (values d t))
 
 (define (jd->jdn jd)
@@ -104,7 +104,7 @@
 (define (jd->day-ns jd)
   (define base (- jd 1/2))
   (define frac (- base (exact-floor base)))
-  
+
   (exact-round (* frac NS/DAY)))
 
 (define (jd->posix jd)

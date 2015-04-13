@@ -32,7 +32,10 @@
          (check-false (equal? (date 2000) (deserialize (serialize d3)))))))
 
    (test-case "date->iso8601"
-     (check-equal? (date->iso8601 (date 2000 6 30)) "2000-06-30"))
+     (check-equal? (date->iso8601 (date 2000 6 30)) "2000-06-30")
+
+     (let ([d (date 2000 6 30)])
+       (check-equal? (iso8601->date (date->iso8601 d)) d)))
 
    (test-suite "date order"
      (let* ([d1 (date 1950)]
