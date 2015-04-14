@@ -19,7 +19,7 @@
 
          (match* ((date->ymd d1) (date->ymd d2))
            [((YMD y1 m1 d1) (YMD y2 m2 d2))
-            
+
             (define diff
               (+ (* (- y2 y1) 12)
                  m2
@@ -30,12 +30,12 @@
                        (= (days-in-month y2 m2) d2))
                   d2
                   d1))
-            
+
             (define dt1a (date+time->datetime (date y1 m1 start-dom) (datetime->time dt1)))
-            
+
             (define ts1 (- (datetime->jd dt1a) (datetime->jd (datetime y1 m1))))
             (define ts2 (- (datetime->jd dt2)  (datetime->jd (datetime y2 m2))))
-            
+
             (if (< ts2 ts1)
                 (sub1 diff)
                 diff)])]))
@@ -44,9 +44,12 @@
   (exact-floor (- (datetime->jd dt2) (datetime->jd dt1))))
 
 (define (datetime-nanoseconds-between dt1 dt2)
-  (define ns1 (* (datetime->jd dt1) NS/DAY))
-  (define ns2 (* (datetime->jd dt2) NS/DAY))
-  (- ns2 ns1))
+  (- (datetime->jdns dt2)
+     (datetime->jdns dt1)))
+
+(define (datetime->jdns dt)
+  (exact-floor
+   (* (datetime->jd dt) NS/DAY)))
 
 (provide/contract
  [datetime-months-between      (-> datetime? datetime? exact-integer?)]
