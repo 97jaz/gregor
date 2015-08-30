@@ -53,4 +53,5 @@ Ideally, Gregor would be able to support many different time scales. API suggest
 @include-section["clock.scrbl"]
 @include-section["format.scrbl"]
 @include-section["timezone.scrbl"]
+@include-section["query.scrbl"]
 @include-section["exceptions.scrbl"]

@@ -17,6 +17,7 @@
  [ymd-add-months    (-> YMD? exact-integer? YMD?)]
  [leap-year?        (-> exact-integer? boolean?)]
  [days-in-month     (-> exact-integer? (integer-in 1 12) (integer-in 28 31))]
+ [days-in-year      (-> exact-integer? (or/c 365 366))]
  [iso-weeks-in-year (-> exact-integer? (or/c 52 53))]
  [day-of-month/c    any/c])
 
@@ -28,13 +29,13 @@
                           (values y m))])
     (+ d
        (exact-truncate
-        (/ 
+        (/
          (- (* 153 m) 457)
          5))
        (* 365 y)
        (exact-floor
         (/ y 4))
-       (- 
+       (-
         (exact-floor
          (/ y 100)))
        (exact-floor
@@ -91,6 +92,9 @@
        (or (not (zero? (remainder y 100)))
            (zero? (remainder y 400)))))
 
+(define (days-in-year y)
+  (if (leap-year? y) 366 365))
+
 (define (days-in-month y m)
   (let ([delta (if (and (= m 2)
                         (leap-year? y))
@@ -103,7 +107,7 @@
 
 (define (iso-weeks-in-year y)
   (define w (jdn->wday (ymd->jdn (YMD y 1 1))))
-  
+
   (cond [(or (= w 4)
              (and (leap-year? y) (= w  3)))
          53]

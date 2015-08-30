@@ -19,7 +19,7 @@ An interface, implemented by @racket[date], @racket[datetime],
 and @racket[moment], that supplies generic operations on dates.
 }
 
-@defproc[(date-provider? [x any/c]) boolean]{
+@defproc[(date-provider? [x any/c]) boolean?]{
 Returns @racket[#t] if @racket[x] implements @racket[gen:date-provider];
 @racket[#f] otherwise.
 }
