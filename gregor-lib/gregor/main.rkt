@@ -35,7 +35,7 @@
          (struct-out exn:gregor:parse))
 
 (provide/contract
-  
+
  ;; date
  [date            (->i ([year exact-integer?])
                        ([month (integer-in 1 12)]
@@ -44,7 +44,7 @@
  [jdn->date       (-> exact-integer? date?)]
  [date?           (-> any/c boolean?)]
  [date->iso8601   (-> date? string?)]
- 
+
  [date=?          (-> date? date? boolean?)]
  [date<?          (-> date? date? boolean?)]
  [date<=?         (-> date? date? boolean?)]
@@ -136,7 +136,7 @@
  [at-noon            (->i ([d date-provider?])
                           (#:resolve-offset [resolve offset-resolver/c])
                           [result datetime-provider?])]
- 
+
  ;; time generics
  [time-provider?     (-> any/c boolean?)]
 
@@ -201,7 +201,7 @@
  ;; moment generics
  [tz/c               any/c]
  [current-timezone   (parameter/c tz/c)]
- 
+
  [moment-provider?   (-> any/c boolean?)]
 
  [->moment           (-> moment-provider? moment?)]
@@ -222,9 +222,9 @@
  [iso8601->datetime      (-> string? datetime?)]
  [iso8601->moment        (-> string? moment?)]
  [iso8601/tzid->moment   (-> string? moment?)]
- 
+
  [current-two-digit-year-resolver (parameter/c (-> (integer-in -99 99) exact-integer?))]
- 
+
  [parse-date         (->i ([input string?]
                            [pattern string?])
                           (#:ci? [ci? boolean?]
@@ -259,7 +259,7 @@
  [resolve-overlap/pre                 overlap-resolver/c]
  [resolve-overlap/post                overlap-resolver/c]
  [resolve-overlap/retain              overlap-resolver/c]
- 
+
  [resolve-offset/pre                  offset-resolver/c]
  [resolve-offset/post                 offset-resolver/c]
  [resolve-offset/post-gap/pre-overlap offset-resolver/c]
@@ -278,7 +278,13 @@
  [now/moment/utc        (-> moment?)]
  [now/utc               (-> datetime?)]
  [today/utc             (-> date?)]
- [current-time/utc      (-> time?)])
+ [current-time/utc      (-> time?)]
+
+ ;; queries
+ [leap-year?        (-> exact-integer? boolean?)]
+ [days-in-year      (-> exact-integer? (or/c 365 366))]
+ [days-in-month     (-> exact-integer? (integer-in 1 12) (integer-in 28 31))]
+ [iso-weeks-in-year (-> exact-integer? (or/c 52 53))])
 
 (provide gen:date-provider
          gen:time-provider

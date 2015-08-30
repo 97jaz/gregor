@@ -10,4 +10,5 @@
          "moment-provider.rkt"
          "format.rkt"
          "parse.rkt"
-         "clock.rkt")
+         "clock.rkt"
+         "query.rkt")
