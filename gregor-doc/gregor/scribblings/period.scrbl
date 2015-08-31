@@ -113,7 +113,7 @@ Returns a fresh period containing only the time components of @racket[p].
 ]}
 
 @defproc[(negate-period [p period?]) period?]{
-Returns a period where each of @racket[p]'s components are negated.
+Returns a period where each of @racket[p]'s components is negated.
 @examples[#:eval the-eval
 (negate-period (period [years 1] [months 2] [days 3] [hours 4] [minutes 5] [seconds 6]))
 ]}
