@@ -54,11 +54,13 @@
             moment-in-utc))
 
 (define (posix->moment p z)
-  (define off
-    (cond [(string? z) (tzoffset-utc-seconds (utc-seconds->tzoffset z p))]
-          [else        z]))
+  (define-values (off tzid)
+    (cond [(string? z)
+           (values (tzoffset-utc-seconds (utc-seconds->tzoffset z p)) z)]
+          [else
+           (values z #f)]))
   (define dt (posix->datetime (+ p off)))
-  (make-moment dt off z))
+  (make-moment dt off tzid))
 
 (define (moment-add-nanoseconds m n)
   (posix->moment (+ (moment->posix m) (* n (/ 1 NS/SECOND)))

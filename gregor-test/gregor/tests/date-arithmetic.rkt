@@ -16,7 +16,10 @@
      (check-equal? (+years (moment 2014 3 8 2 #:tz "America/New_York") 1)
                    (moment 2015 3 8 3 #:tz "America/New_York"))
      (check-equal? (+years (moment 2016 3 8 2 #:tz "America/New_York") -1)
-                   (moment 2015 3 8 3 #:tz "America/New_York")))
+                   (moment 2015 3 8 3 #:tz "America/New_York"))
+     (check-equal? (+years (moment 2016 3 8 2 #:tz -18000) -1)
+                   (moment 2015 3 8 2 #:tz -18000)))
+
 
    (test-case "-years"
      (check-equal? (-years (date 1970) -4) (date 1974))
@@ -27,6 +30,8 @@
                    (moment 2015 3 8 3 #:tz "America/New_York"))
      (check-equal? (-years (moment 2016 3 8 2 #:tz "America/New_York") 1)
                    (moment 2015 3 8 3 #:tz "America/New_York"))
+     (check-equal? (-years (moment 2016 3 8 2 #:tz -18000) 1)
+                   (moment 2015 3 8 2 #:tz -18000))
 
      (check-exn exn:gregor:invalid-offset?
                 (λ ()
@@ -42,7 +47,9 @@
      (check-equal? (+months (moment 2015 2 8 2 #:tz "America/New_York") 1)
                    (moment 2015 3 8 3 #:tz "America/New_York"))
      (check-equal? (+months (moment 2015 4 8 2 #:tz "America/New_York") -1)
-                   (moment 2015 3 8 3 #:tz "America/New_York")))
+                   (moment 2015 3 8 3 #:tz "America/New_York"))
+     (check-equal? (+months (moment 2015 4 8 2 #:tz -14400) -1)
+                   (moment 2015 3 8 2 #:tz -14400)))
 
    (test-case "-months"
      (check-equal? (-months (date 1970) -4) (date 1970 5))
@@ -52,7 +59,9 @@
      (check-equal? (-months (moment 2015 2 8 2 #:tz "America/New_York") -1)
                    (moment 2015 3 8 3 #:tz "America/New_York"))
      (check-equal? (-months (moment 2015 4 8 2 #:tz "America/New_York") 1)
-                   (moment 2015 3 8 3 #:tz "America/New_York")))
+                   (moment 2015 3 8 3 #:tz "America/New_York"))
+     (check-equal? (-months (moment 2015 4 8 2 #:tz -14400) 1)
+                   (moment 2015 3 8 2 #:tz -14400)))
 
    (test-case "+weeks"
      (check-equal? (+weeks (date 1970) 6) (date 1970 2 12))
@@ -64,7 +73,9 @@
                       #:tz "America/Los_Angeles"
                       #:resolve-offset resolve-offset/raise)
               1)
-      (moment 2015 3 8 3 #:tz "America/Los_Angeles")))
+      (moment 2015 3 8 3 #:tz "America/Los_Angeles"))
+     (check-equal? (+weeks (moment 2015 3 1 #:tz -18000) 1)
+                   (moment 2015 3 8 #:tz -18000)))
 
    (test-case "-weeks"
      (check-equal? (-weeks (date 1970) -6) (date 1970 2 12))
@@ -76,7 +87,9 @@
                       #:tz "America/Los_Angeles"
                       #:resolve-offset resolve-offset/raise)
               -1)
-      (moment 2015 3 8 3 #:tz "America/Los_Angeles")))
+      (moment 2015 3 8 3 #:tz "America/Los_Angeles"))
+     (check-equal? (-weeks (moment 2015 3 8 #:tz -18000) 1)
+                   (moment 2015 3 1 #:tz -18000)))
 
    (test-case "+days"
      (check-equal? (+days (date 1980) (* 365 2)) (date 1981 12 31))
@@ -85,7 +98,9 @@
                 (λ ()
                   (+days (moment 2015 3 7 2 #:tz "America/Denver")
                          1
-                         #:resolve-offset resolve-offset/raise))))
+                         #:resolve-offset resolve-offset/raise)))
+     (check-equal? (+days (moment 2015 3 7 2 #:tz -25200) 1)
+                   (moment 2015 3 8 2 #:tz -25200)))
 
    (test-case "-days"
      (check-equal? (-days (date 1980) (* 365 -2)) (date 1981 12 31))
@@ -94,15 +109,19 @@
                 (λ ()
                   (-days (moment 2015 3 7 2 #:tz "America/Denver")
                          -1
-                         #:resolve-offset resolve-offset/raise))))
+                         #:resolve-offset resolve-offset/raise)))
+     (check-equal? (-days (moment 2015 3 8 2 #:tz -25200) 1)
+                   (moment 2015 3 7 2 #:tz -25200)))
 
    (test-case "+date-period"
      (check-equal? (+date-period (date 1980 6 5) (days 10)) (date 1980 6 15))
      (check-equal? (+date-period (datetime 2000 10 10) (weeks -2)) (datetime 2000 9 26))
      (check-equal? (+date-period (moment 2015 8 30) (months 23)) (moment 2017 7 30))
+     (check-equal? (+date-period (moment 2015 8 30 #:tz 0) (months 23)) (moment 2017 7 30 #:tz 0))
      (check-equal? (+date-period (date 1990) (years 10)) (date 2000))
      (check-equal? (+date-period (date 1950) (period [years 6] [months 2] [days 15])) (date 1956 3 16)))
 
    (test-case "-date-period"
      (check-equal? (-date-period (date 1956 3 16) (period [years 6] [months 2] [days 15])) (date 1950))
-     (check-equal? (-date-period (datetime 1956 3 16) (period [years 6] [months 2] [days 15])) (datetime 1950)))))
+     (check-equal? (-date-period (datetime 1956 3 16) (period [years 6] [months 2] [days 15])) (datetime 1950))
+     (check-equal? (-date-period (moment 2017 7 30 #:tz 0) (months 23)) (moment 2015 8 30 #:tz 0)))))
