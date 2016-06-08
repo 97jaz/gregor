@@ -13,8 +13,12 @@
      (check-equal? (+period (datetime 1970) (period [years 5] [hours 2]))
                    (datetime 1975 1 1 2 0))
      (check-equal? (+period (moment 1970 #:tz "UTC") (period [years 5] [hours 2]))
-                   (moment 1975 1 1 2 0 #:tz "UTC")))
+                   (moment 1975 1 1 2 0 #:tz "UTC"))
+     (check-equal? (+period (moment 1970 #:tz 0) (period [years 5] [hours 2]))
+                   (moment 1975 1 1 2 0 #:tz 0)))
 
    (test-case "-period"
      (check-equal? (-period (datetime 2010 12 10 18) (period [years 1] [weeks -2] [minutes 100]))
-                   (-minutes (+weeks (-years (datetime 2010 12 10 18) 1) 2) 100)))))
+                   (-minutes (+weeks (-years (datetime 2010 12 10 18) 1) 2) 100))
+     (check-equal? (-period (moment 2010 12 10 18 #:tz 0) (period [years 1] [weeks -2] [minutes 100]))
+                   (-minutes (+weeks (-years (moment 2010 12 10 18 #:tz 0) 1) 2) 100)))))

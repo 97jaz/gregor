@@ -15,20 +15,24 @@
    (test-suite "moment struct"
      (let* ([t1 (moment 1970 #:tz "Etc/UTC")]
             [t2 (moment 1969 12 31 19 #:tz "America/New_York")]
-            [t3 (moment 1969 12 31 16 #:tz "America/Los_Angeles")])
+            [t3 (moment 1969 12 31 16 #:tz "America/Los_Angeles")]
+            [t4 (moment 1969 12 31 19 #:tz -18000)])
 
        (test-case "temporal equality"
          (check-true (moment=? t1 t2))
          (check-true (moment=? t1 t3))
+         (check-true (moment=? t1 t4))
          (check-false (moment=? t1 (moment 2015 #:tz "Etc/UTC"))))
 
        (test-case "structural equality"
          (check-true (equal? t1 (moment 1970 1 1 #:tz "Etc/UTC")))
          (check-false (equal? t1 t2))
+         (check-false (equal? t1 t4))
          (check-false (equal? t1 t3)))
 
        (test-case "serializability"
          (check-true (equal? t1 (deserialize (serialize t1))))
+         (check-true (equal? t4 (deserialize (serialize t4))))
          (check-false (equal? (moment 2015 #:tz "Etc/UTC") (deserialize (serialize t3)))))))
 
    (test-case "moment->iso8601"
