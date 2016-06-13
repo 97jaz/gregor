@@ -24,7 +24,7 @@ the @link["http://www.iana.org/time-zones"]{tz} database; and}
 @section[#:tag "time-scale"]{Time Scale}
 
 Gregor assumes that all days have exactly 86,400 seconds. Therefore, it is based fundamentally
-on mean solar time, or @link["http://en.wikipedia.org/wiki/Universal_Time"]{Univeral Time},
+on mean solar time, or @link["http://en.wikipedia.org/wiki/Universal_Time"]{Universal Time},
 and @emph{not} on
 @link["http://en.wikipedia.org/wiki/Coordinated_Universal_Time"]{Coordinated Universal Time} (UTC),
 the civil time scale adopted by most of the world. In the interest of reconciling the SI second
