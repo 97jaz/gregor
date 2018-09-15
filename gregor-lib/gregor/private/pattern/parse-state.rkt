@@ -40,7 +40,7 @@
   (match-define (fields era year month day period hour minute second nano offset tzid)
     fs)
 
-  (unless year (err "Insufficient data in input to construct a temporal object"))
+  (unless year (err "Insufficient data in input to construct a temporal object; missing year"))
 
   (define y (if (= 0 era) (add1 (- year)) year))
   (define m (or month 1))
