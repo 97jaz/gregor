@@ -75,10 +75,7 @@
        (andmap (λ (fstx) (field->accessor fstx)) (syntax->list #'(field ...)))
        (with-syntax ([(accessor ...) (map field->accessor (syntax->list #'(field ...)))])
          #`(and (app accessor pat) ...))]))
-  (λ (stx)
-    (syntax-case stx ()
-      [(_ xs ...) #'(period xs ...)]
-      [_ #'period])))
+  (make-rename-transformer #'period))
 
 (define date-period? Period-dp?)
 (define time-period? Period-tp?)
