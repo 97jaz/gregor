@@ -2,6 +2,7 @@
 
 @(require scribble/eval
           (for-label (except-in racket/base date date? time)
+                     racket/contract
                      gregor
                      gregor/time
                      gregor/period
@@ -21,14 +22,14 @@ An interface that defines time arithmetic operations. It is implemented by
 all objects that satisfy either @racket[time-provider?] or @racket[period?].
 }
 
-@defproc[(time-arithmetic-provider? [x any/c]) boolean]{
+@defproc[(time-arithmetic-provider? [x any/c]) boolean?]{
 Returns @racket[#t] if @racket[x] implements @racket[gen:time-arithmetic-provider];
 @racket[#f] otherwise.
 }
 
 @deftogether[(@defproc[(+hours [t time-arithmetic-provider?]
                                [n exact-integer?])
-                       time-arithmetic-provider]
+                       time-arithmetic-provider?]
               @defproc[(-hours [t time-arithmetic-provider?]
                                [n exact-integer?])
                        time-arithmetic-provider?])]{

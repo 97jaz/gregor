@@ -2,6 +2,7 @@
 
 @(require scribble/eval
           (for-label (except-in racket/base date date? time)
+                     racket/contract
                      gregor
                      gregor/time))
 
@@ -46,6 +47,13 @@
    (days-in-month 2015 2)
    (days-in-month 2016 2)
  ]
+}
+
+@defproc[(day-of-month/c [y exact-integer?]
+                         [m (integer-in 1 12)])
+         flat-contract?]{
+  Returns a contract for days in the specified month.
+  The contract is equivalent to @racket[(integer-in 1 (days-in-month y m))].
 }
 
 @defproc[(iso-weeks-in-year [y exact-integer?]) (or/c 52 53)]{

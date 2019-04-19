@@ -2,6 +2,7 @@
 
 @(require scribble/eval
           (for-label (except-in racket/base date date? time)
+                     racket/contract
                      gregor
                      gregor/time
                      data/order))
@@ -114,7 +115,7 @@ is 365 or 366 days.
 @defproc[(with-timezone [t datetime-provider?]
                         [tz tz/c]
                         [#:resolve-offset resolve-offset offset-resolver/c])
-         timezone-provider?]{
+         moment-provider?]{
 Attaches @racket[tz] to the local @racket[datetime] component of @racket[t].
 Note that if @racket[t] starts with any timezone information, it is discarded.
 @margin-note{

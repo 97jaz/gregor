@@ -2,6 +2,7 @@
 
 @(require scribble/eval
           (for-label (except-in racket/base date date? time)
+                     racket/contract
                      racket/match
                      gregor
                      gregor/time
@@ -85,7 +86,7 @@ Returns the value in period @racket[p] corresponding to field @racket[f].
 (period-ref (years 10) 'hours)
 ]}
 
-@defproc[(period-set [p period?] [f temporal-unit/c] [n exact-integer]) period?]{
+@defproc[(period-set [p period?] [f temporal-unit/c] [n exact-integer?]) period?]{
 Returns a fresh period equivalent to @racket[p], except that field @racket[f] is set to @racket[n].
 @examples[#:eval the-eval
 (period-set (years 10) 'years -10)

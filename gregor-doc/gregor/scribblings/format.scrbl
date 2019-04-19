@@ -3,7 +3,9 @@
 @(require scribble/eval
           gregor
           (for-label (except-in racket/base date date? time)
-                     gregor))
+                     racket/contract
+                     gregor
+                     gregor/time))
 
 @(define the-eval (make-base-eval))
 @(the-eval '(require gregor
