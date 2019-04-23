@@ -2,6 +2,7 @@
 
 @(require scribble/eval
           (for-label (except-in racket/base date date? time)
+                     racket/contract
                      gregor
                      data/order
                      data/splay-tree))

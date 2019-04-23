@@ -3,6 +3,7 @@
 @(require scribble/eval
           gregor
           (for-label (except-in racket/base date date? time)
+                     racket/contract
                      tzinfo
                      gregor))
 
@@ -65,7 +66,7 @@ A contract for @tech{offset resolver} functions. The contract is specified as:
                           [overlap-resolver overlap-resolver/c])
          offset-resolver/c]{
 Constructs an @tech{offset resolver} from the given @racket[gap-resolver] and
-@racket[overlap resolver].
+@racket[overlap-resolver].
 }
 
 @defproc[(resolve-offset/raise [gap-or-overlap (or/c tzgap? tzoverlap?)]

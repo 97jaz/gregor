@@ -310,9 +310,13 @@
  [leap-year?        (-> exact-integer? boolean?)]
  [days-in-year      (-> exact-integer? (or/c 365 366))]
  [days-in-month     (-> exact-integer? (integer-in 1 12) (integer-in 28 31))]
+ [day-of-month/c    (-> exact-integer? (integer-in 1 12) (-> any/c boolean?))]
  [iso-weeks-in-year (-> exact-integer? (or/c 52 53))])
 
 (provide gen:date-provider
          gen:time-provider
          gen:datetime-provider
-         gen:moment-provider)
+         gen:moment-provider
+         gen:date-arithmetic-provider
+         gen:time-arithmetic-provider
+         gen:datetime-arithmetic-provider)

@@ -2,6 +2,7 @@
 
 @(require scribble/eval
           (for-label (except-in racket/base date date? time)
+                     racket/contract
                      gregor
                      gregor/time
                      data/order
@@ -25,8 +26,8 @@ that of the built-in @racketlink[base:time]{time} function, which is used for me
 the time spent evaluating programs.
 
 To mitigate problems that might be caused by this conflict, Gregor does not provide
-@racket[time]-related bindings from the @racket[gregor] module. Instead, they are provided
-by the @racket[gregor/time] module.
+@racket[time]-related bindings from the @racketmodname[gregor] module. Instead, they are provided
+by the @racketmodname[gregor/time] module.
 
 @defproc[(time [hour (integer-in 0 23)]
                [minute (integer-in 0 59) 0]

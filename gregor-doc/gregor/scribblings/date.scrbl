@@ -2,7 +2,9 @@
 
 @(require scribble/eval
           (for-label (except-in racket/base date date? time)
+                     racket/contract
                      gregor
+                     gregor/time
                      data/order
                      data/splay-tree
                      (prefix-in base: (only-in racket/base date))))
@@ -17,7 +19,7 @@
 
 Gregor provides a @racket[date] struct that represents a calendar date without a time
 or time zone. Unfortunately, the name @tt{date} conflicts with an
-@racketlink[base:date]{existing, incompatible definition} in @racket[racket/base].
+@racketlink[base:date]{existing, incompatible definition} in @racketmodname[racket/base].
 
 The author of this package considered other names, including @tt{Date} (with a capital D)
 and @tt{local-date} (à la @link["http://www.joda.org/joda-time/"]{Joda-Time})

@@ -2,6 +2,7 @@
 
 @(require scribble/eval
           (for-label (except-in racket/base date date? time)
+                     racket/contract
                      gregor
                      gregor/time
                      gregor/period
@@ -28,7 +29,7 @@ Returns @racket[#t] if @racket[x] implements @racket[gen:datetime-arithmetic-pro
 
 @deftogether[(@defproc[(+period [dt datetime-arithmetic-provider?]
                                 [p period?])
-                       datetime-arithmetic-provider]
+                       datetime-arithmetic-provider?]
               @defproc[(-period [dt datetime-arithmetic-provider?]
                                 [p period?])
                        datetime-arithmetic-provider?])]{
