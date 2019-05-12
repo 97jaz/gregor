@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: leastfixedpoint/racket
+  steps:
+    - checkout
+
+    - run:
+        name: Install gregor
+        command: raco pkg --link ./gregor
+
+    - run:
+        name: Run gregor tests
+        command: raco test -c gregor
