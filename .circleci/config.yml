@@ -1,15 +1,21 @@
 version: 2
+
 jobs:
   build:
+    working_directory: ~/build
+
     docker:
-      - image: leastfixedpoint/racket
-  steps:
-    - checkout
+      - image: jackfirth/racket
 
-    - run:
-        name: Install gregor
-        command: raco pkg --link ./gregor
+    steps:
+      - checkout
 
-    - run:
-        name: Run gregor tests
-        command: raco test -c gregor
+      - run:
+          name: Install gregor
+          command: |
+            raco pkg install tzdata
+            raco pkg install --auto --link ./gregor
+
+      - run:
+          name: Run gregor tests
+          command: raco test ./gregor-test
