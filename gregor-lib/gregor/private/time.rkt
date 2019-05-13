@@ -58,7 +58,7 @@
   (format "~a:~a:~a~a" (f h 2) (f m 2) pad (~r fsec #:precision 9)))
 
 (match-define (comparison time=? time<? time<=? time>? time>=? time-comparator time-order)
-  (build-comparison 'time-order time? time->ns))
+  (build-comparison 'time time? time->ns))
 
 (define deserialize-info:Time
   (make-deserialize-info

@@ -84,7 +84,7 @@
   (datetime+tz->moment (moment->datetime/local m) z resolve))
 
 (match-define (comparison moment=? moment<? moment<=? moment>? moment>=? moment-comparator moment-order)
-  (build-comparison 'moment-order moment? moment->jd))
+  (build-comparison 'moment moment? moment->jd))
 
 (define UTC "Etc/UTC")
 

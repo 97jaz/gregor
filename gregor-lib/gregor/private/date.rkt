@@ -80,7 +80,7 @@
     [(YMD y m d) (format "~a-~a-~a" (f y 4) (f m 2) (f d 2))]))
 
 (match-define (comparison date=? date<? date<=? date>? date>=? date-compare date-order)
-  (build-comparison 'date-order date? date->jdn))
+  (build-comparison 'date date? date->jdn))
 
 (define deserialize-info:Date
   (make-deserialize-info

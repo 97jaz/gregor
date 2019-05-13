@@ -67,7 +67,7 @@
           (time->iso8601 (datetime->time dt))))
 
 (match-define (comparison datetime=? datetime<? datetime<=? datetime>? datetime>=? datetime-comparator datetime-order)
-  (build-comparison 'datetime-order datetime? datetime->jd))
+  (build-comparison 'datetime datetime? datetime->jd))
 
 (define deserialize-info:DateTime
   (make-deserialize-info
