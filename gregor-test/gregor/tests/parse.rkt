@@ -68,7 +68,9 @@
            (check-equal? (->year d) 2005)
            (check-equal? (->iso-wyear d) 2004))
 
-         (check-equal? (->year (parse-date "2005-01-01 / ISO 04" "uuuu-MM-dd / 'ISO' YY")) 2005))
+         (check-equal? (->year (parse-date "2005-01-01 / ISO 04" "uuuu-MM-dd / 'ISO' YY")) 2005)
+         (check-equal? (->year (parse-date "532020" "wwy")) 2020)
+         (check-equal? (->year (parse-date "52020" "Wy")) 2020))
 
        (test-suite "[u]"
          (check-equal? (->year (parse-date "2000" "u")) 2000)
@@ -90,7 +92,13 @@
          (check-not-exn (λ () (parse-date "04 2000" "QQ u")))
          (check-not-exn (λ () (parse-date "Q4 2000" "QQQ u")))
          (check-not-exn (λ () (parse-date "4th quarter 2000" "QQQQ u")))
-         (check-not-exn (λ () (parse-date "4 2000" "QQQQQ u"))))
+         (check-not-exn (λ () (parse-date "4 2000" "QQQQQ u")))
+
+         ;; FIXME(?):
+         ;; Parsing probably should use the quarter to constrain the month
+         ;; and provide a default value for it, but right now it's unused.
+         (check-equal? (parse-date "042000" "QQu")
+                       (date 2000)))
 
        (test-suite "[q]"
          (check-not-exn (λ () (parse-date "4 2000" "q u")))
@@ -100,6 +108,10 @@
          (check-not-exn (λ () (parse-date "4 2000" "qqqqq u")))))
 
      (test-suite "month"
+       (parameterize ([current-two-digit-year-resolver (λ (y) (+ 2000 y))])
+         (check-equal? (parse-date "191115" "yyMMdd")
+                       (date 2019 11 15)))
+
        ;; 1. No point in testing narrow case, since it's not unique AND YOU SHOULD NEVER PARSE WITH IT.
        ;; 2. We'll test in Greek to demonstrate the difference between format and stand-alone patterns
        ;;    (Απριλίου [genitive] vs. Απρίλιος [nominative])
@@ -121,6 +133,10 @@
      ;; week patterns were tested above, alongside Y
 
      (test-suite "day"
+       (parameterize ([current-two-digit-year-resolver (λ (y) (+ 2000 y))])
+         (check-equal? (parse-date "191511" "yyddMM")
+                       (date 2019 11 15)))
+
        (check-n #\d "u M ~a"
                 '("1234 1 9" "1234 1 09")
                 (λ (d) (date=? d (date 1234 1 9))))
@@ -129,7 +145,10 @@
                 '("2000 5" "2000 05" "2000 005")
                 (λ (d) (= (->year d) 2000)))
 
+       (check-equal? (->year (parse-date "0052000" "DDDy")) 2000)
+
        (check-equal? (->year (parse-date "2000 3" "u F")) 2000)
+       (check-equal? (->year (parse-date "32000" "Fu")) 2000)
 
        (check-equal? (parse-date "2451334" "g") (date 1999 6 4)))
 
@@ -142,9 +161,12 @@
        (check-n #\e "u ~a"
                 '("2000 7" "2000 07" "2000 Sat" "2000 Saturday")
                 (λ (d) (equal? d (date 2000))))
+       (check-equal? (parse-date "72000" "eu") (date 2000))
+       (check-equal? (parse-date "072000" "eeu") (date 2000))
        (check-equal? (parse-date "2000 Sa" "u eeeeee") (date 2000))
 
        (check-equal? (parse-date "2000 7" "u c") (date 2000))
+       (check-equal? (parse-date "72000" "cu") (date 2000))
        ;; per spec, no 'cc' pattern
        (check-equal? (parse-date "2000 Sat" "u ccc") (date 2000))
        (check-equal? (parse-date "2000 Saturday" "u cccc") (date 2000))
@@ -168,11 +190,15 @@
 
      (test-suite "minute"
        (check-equal? (->minutes (parse-time "17:30" "H:mm")) 30)
-       (check-equal? (->minutes (parse-time "17:45" "H:m")) 45))
+       (check-equal? (->minutes (parse-time "17:45" "H:m")) 45)
+       (check-equal? (parse-time "1730" "HHmm") (time 17 30))
+       (check-equal? (parse-time "3017" "mmHH") (time 17 30)))
 
      (test-suite "second"
        (check-equal? (->seconds (parse-time "17:30:20" "H:mm:ss")) 20)
        (check-equal? (->seconds (parse-time "4:20:00" "H:m:s")) 0)
+       (check-equal? (parse-time "173020" "HHmmss") (time 17 30 20))
+       (check-equal? (parse-time "203017" "ssmmHH") (time 17 30 20))
 
        (check-equal? (->milliseconds (parse-time "1:30:00.6" "H:mm:ss.S")) 600)
        (check-equal? (->milliseconds (parse-time "1:30:00.06" "H:mm:ss.SS")) 60)

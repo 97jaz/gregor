@@ -21,7 +21,7 @@
 
 (define (hour-parse ast state ci? loc)
   (define (parse n ok? update)
-    (num-parse ast loc state update #:min n #:ok? ok?))
+    (num-parse ast loc state update #:min n #:max 2 #:ok? ok?))
     
   (match ast
     [(Hour _ 'half n)

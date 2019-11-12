@@ -23,7 +23,7 @@
 (define (second-parse ast state ci? loc)
   (match ast
     [(Second _ n)
-     (num-parse ast loc state (parse-state/ second) #:min n #:ok? (between/c 0 59))]))
+     (num-parse ast loc state (parse-state/ second) #:min n #:max 2 #:ok? (between/c 0 59))]))
 
 (define (second/frac-fmt ast t loc)
   (match ast
