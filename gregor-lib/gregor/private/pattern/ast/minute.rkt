@@ -17,7 +17,7 @@
 (define (minute-parse ast state ci? loc)
   (match ast
     [(Minute _ n)
-     (num-parse ast loc state (parse-state/ minute) #:min n #:ok? (between/c 0 59))]))
+     (num-parse ast loc state (parse-state/ minute) #:min n #:max 2 #:ok? (between/c 0 59))]))
 
 (struct Minute Ast (size)
   #:transparent

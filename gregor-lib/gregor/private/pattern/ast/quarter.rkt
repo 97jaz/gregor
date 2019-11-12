@@ -21,7 +21,7 @@
 (define (quarter-parse ast state ci? loc)
   (match ast
     [(Quarter _ 'numeric n)
-     (num-parse ast loc state parse-state/ignore #:min n #:ok? (between/c 1 4))]
+     (num-parse ast loc state parse-state/ignore #:min n #:max 2 #:ok? (between/c 1 4))]
     [(Quarter _ kind size)
      (symnum-parse ast (quarter-trie loc ci? kind size) state parse-state/ignore)]))
 

@@ -21,11 +21,11 @@
 (define (day-parse ast state ci? loc)
   (match ast
     [(Day _ 'month n)
-     (num-parse ast loc state (parse-state/ day) #:min n #:ok? (between/c 1 31))]
+     (num-parse ast loc state (parse-state/ day) #:min n #:max 2 #:ok? (between/c 1 31))]
     [(Day _ 'year n)
-     (num-parse ast loc state parse-state/ignore #:min n #:ok? (between/c 1 366))]
+     (num-parse ast loc state parse-state/ignore #:min n #:max 3 #:ok? (between/c 1 366))]
     [(Day _ 'week/month n)
-     (num-parse ast loc state parse-state/ignore #:min n #:ok? (between/c 1 5))]
+     (num-parse ast loc state parse-state/ignore #:min n #:max 1 #:ok? (between/c 1 5))]
     [(Day _ 'jdn n)
      (define (update str fs jdn)
        (match-define (YMD y m d) (jdn->ymd jdn))

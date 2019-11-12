@@ -21,7 +21,7 @@
 (define (month-parse ast state ci? loc)
   (match ast
     [(Month _ 'numeric n)
-     (num-parse ast loc state (parse-state/ month) #:min n #:ok? (between/c 1 12))]
+     (num-parse ast loc state (parse-state/ month) #:min n #:max 2 #:ok? (between/c 1 12))]
     [(Month _ kind size)
      (symnum-parse ast (month-trie loc ci? kind size) state (parse-state/ month))]))
 

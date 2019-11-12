@@ -17,8 +17,8 @@
 
 (define (week-parse ast state ci? loc)
   (match ast
-    [(Week _ 'year n)  (num-parse ast loc state parse-state/ignore #:min n #:ok? (between/c 1 53))]
-    [(Week _ 'month n) (num-parse ast loc state parse-state/ignore #:min n #:ok? (between/c 1 6))]))
+    [(Week _ 'year n)  (num-parse ast loc state parse-state/ignore #:min n #:max 2 #:ok? (between/c 1 53))]
+    [(Week _ 'month n) (num-parse ast loc state parse-state/ignore #:min n #:max 1 #:ok? (between/c 1 6))]))
 
 (struct Week Ast (kind size)
   #:transparent

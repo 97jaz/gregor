@@ -28,7 +28,7 @@
 (define (weekday/loc-parse ast state ci? loc)
   (match ast
     [(Weekday/Loc _ 'numeric n)
-     (num-parse ast loc state parse-state/ignore #:min n #:ok? (between/c 1 7))]
+     (num-parse ast loc state parse-state/ignore #:min n #:max n #:ok? (between/c 1 7))]
     [(Weekday/Loc _ kind size)
      (sym-parse ast (weekday-trie loc ci? kind size) state parse-state/ignore)]))
 
