@@ -14,7 +14,9 @@ jobs:
           name: Install gregor
           command: |
             raco pkg install tzdata
-            raco pkg install --auto --link ./gregor
+            raco pkg install --auto --link ./gregor-lib
+            raco pkg install --auto --link ./gregor-test
+            raco pkg install --auto --link ./gregor-doc
 
       - run:
           name: Run gregor tests
