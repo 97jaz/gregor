@@ -22,11 +22,16 @@
                         make-temporal)
   (define cldr-locale (locale->available-cldr-locale locale modern-locale?))
   (define initial-state (parse-state input (fresh-fields)))
-  (define xs (pattern->ast-list pattern))
+  (define ast-nodes (pattern->ast-list pattern))
+  (define next-ast-nodes
+    (if (null? ast-nodes)
+        null
+        (append (cdr ast-nodes) (list #f))))
 
   (match-define (parse-state remaining-input fields)
-    (for/fold ([s initial-state]) ([x (in-list xs)])
-      (ast-parse x s ci? cldr-locale)))
+    (for/fold ([s initial-state]) ([node (in-list ast-nodes)]
+                                   [next-node (in-list next-ast-nodes)])
+      (ast-parse node next-node s ci? cldr-locale)))
 
   (cond [(zero? (string-length remaining-input))
          (make-temporal fields)]

@@ -18,7 +18,7 @@
     [(Day _ 'week/month n) (num-fmt loc (add1 (quotient (sub1 (->day t)) 7)) n)]
     [(Day _ 'jdn n)        (num-fmt loc (->jdn t) n)]))
 
-(define (day-parse ast state ci? loc)
+(define (day-parse ast next-ast state ci? loc)
   (match ast
     [(Day _ 'month n)
      (num-parse ast loc state (parse-state/ day) #:min n #:max 2 #:ok? (between/c 1 31))]
@@ -29,20 +29,23 @@
     [(Day _ 'jdn n)
      (define (update str fs jdn)
        (match-define (YMD y m d) (jdn->ymd jdn))
-       
+
        (parse-state
         str
         (struct-copy fields
                      (set-fields-year/ext fs y)
                      [month m]
                      [day d])))
-     
+
      (num-parse ast loc state update #:min n #:neg #t)]))
 
+(define (day-numeric? ast)
+  #t)
 
 (struct Day Ast (kind size)
   #:transparent
   #:methods gen:ast
   [(define ast-fmt-contract date-provider-contract)
    (define ast-fmt day-fmt)
-   (define ast-parse day-parse)])
+   (define ast-parse day-parse)
+   (define ast-numeric? day-numeric?)])

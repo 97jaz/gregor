@@ -11,7 +11,7 @@
   (match ast
     [(Literal _ txt) txt]))
 
-(define (literal-parse ast state ci? loc)
+(define (literal-parse ast next-ast state ci? loc)
   (match ast
     [(Literal _ txt)
      (define re (regexp (string-append "^" (regexp-quote txt))))
@@ -22,9 +22,13 @@
                       (parse-state-fields state))
          (parse-error ast state))]))
 
+(define (literal-numeric? ast)
+  #f)
+
 (struct Literal Ast (txt)
   #:transparent
   #:methods gen:ast
   [(define (ast-fmt-contract ast) any/c)
    (define ast-fmt literal-fmt)
-   (define ast-parse literal-parse)])
+   (define ast-parse literal-parse)
+   (define ast-numeric? literal-numeric?)])

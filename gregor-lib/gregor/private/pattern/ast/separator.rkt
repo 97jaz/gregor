@@ -11,7 +11,7 @@
 (define (time-separator-fmt ast t loc)
   (time-separator loc))
 
-(define (time-separator-parse ast state ci? loc)
+(define (time-separator-parse ast next-ast state ci? loc)
   (define sep (time-separator loc))
   (define re (regexp (string-append "^" (regexp-quote sep))))
   (define input (parse-state-input state))
@@ -21,9 +21,13 @@
                    (parse-state-fields state))
       (parse-error ast state)))
 
+(define (separator-numeric? ast)
+  #f)
+
 (struct TimeSeparator Ast ()
   #:transparent
   #:methods gen:ast
   [(define (ast-fmt-contract ast) any/c)
    (define ast-fmt time-separator-fmt)
-   (define ast-parse time-separator-parse)])
+   (define ast-parse time-separator-parse)
+   (define ast-numeric? separator-numeric?)])
