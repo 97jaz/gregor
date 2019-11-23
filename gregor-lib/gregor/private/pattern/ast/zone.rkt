@@ -36,7 +36,7 @@
     [(Zone _ 'gmt _)              moment-provider?]
     [_                            tzid-provider?]))
 
-(define (zone-parse ast state ci? loc)
+(define (zone-parse ast next-ast state ci? loc)
   (match ast
     [(Zone _ 'iso/basic pat)      (zone/iso-parse ast state pat #f "")]
     [(Zone _ 'iso/basic/z pat)    (zone/iso-parse ast state pat #t "")]
@@ -45,10 +45,13 @@
     [(Zone _ 'id 'short)          (zone-short-id-parse ast state ci?)]
     [(Zone _ 'id 'long)           (zone-long-id-parse ast state ci?)]))
 
+(define (zone-numeric? ast)
+  #f)
+
 (struct Zone Ast (kind size)
   #:transparent
   #:methods gen:ast
   [(define ast-fmt-contract zone-fmt-contract)
    (define ast-fmt zone-fmt)
-   (define ast-parse zone-parse)])
-
+   (define ast-parse zone-parse)
+   (define ast-numeric? zone-numeric?)])

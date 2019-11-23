@@ -20,7 +20,7 @@
   (match ast
     [(Second _ n) (num-fmt loc (->seconds t) n)]))
 
-(define (second-parse ast state ci? loc)
+(define (second-parse ast next-ast state ci? loc)
   (match ast
     [(Second _ n)
      (num-parse ast loc state (parse-state/ second) #:min n #:max 2 #:ok? (between/c 0 59))]))
@@ -34,7 +34,7 @@
       loc
       (~a nano-str #:align 'left #:width n #:pad-string "0"))]))
 
-(define (second/frac-parse ast state ci? loc)
+(define (second/frac-parse ast next-ast state ci? loc)
   (match ast
     [(SecondFraction _ n)
      (define input (parse-state-input state))
@@ -59,7 +59,7 @@
      
      (num-fmt loc ms n)]))
 
-(define (millisecond-parse ast state ci? loc)
+(define (millisecond-parse ast next-ast state ci? loc)
   (match ast
     [(Millisecond _ n)
      (define (update str fs ms)
@@ -78,23 +78,29 @@
      
      (num-parse ast loc state update #:min n #:ok? (between/c 0 (sub1 MILLI/DAY)))]))
 
+(define (second-numeric? ast)
+  #t)
+
 (struct Second Ast (size)
   #:transparent
   #:methods gen:ast
   [(define ast-fmt-contract time-provider-contract)
    (define ast-fmt second-fmt)
-   (define ast-parse second-parse)])
+   (define ast-parse second-parse)
+   (define ast-numeric? second-numeric?)])
 
 (struct SecondFraction Ast (size)
   #:transparent
   #:methods gen:ast
   [(define ast-fmt-contract time-provider-contract)
    (define ast-fmt second/frac-fmt)
-   (define ast-parse second/frac-parse)])
+   (define ast-parse second/frac-parse)
+   (define ast-numeric? second-numeric?)])
 
 (struct Millisecond Ast (size)
   #:transparent
   #:methods gen:ast
   [(define ast-fmt-contract time-provider-contract)
    (define ast-fmt millisecond-fmt)
-   (define ast-parse millisecond-parse)])
+   (define ast-parse millisecond-parse)
+   (define ast-numeric? second-numeric?)])

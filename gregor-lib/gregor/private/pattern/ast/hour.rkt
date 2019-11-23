@@ -19,7 +19,7 @@
     [(Hour _ 'half/zero n) (num-fmt loc (remainder h 12) n)]
     [(Hour _ 'full/one n)  (num-fmt loc (mod1 h 24) n)]))
 
-(define (hour-parse ast state ci? loc)
+(define (hour-parse ast next-ast state ci? loc)
   (define (parse n ok? update)
     (num-parse ast loc state update #:min n #:max 2 #:ok? ok?))
     
@@ -41,10 +41,14 @@
             (λ (str fs h)
               (define res (if (= h 24) 0 h))
               (parse-state str (set-fields-hour/full fs res))))]))
+
+(define (hour-numeric? ast)
+  #t)
      
 (struct Hour Ast (kind size)
   #:transparent
   #:methods gen:ast
   [(define ast-fmt-contract time-provider-contract)
    (define ast-fmt hour-fmt)
-   (define ast-parse hour-parse)])
+   (define ast-parse hour-parse)
+   (define ast-numeric? hour-numeric?)])

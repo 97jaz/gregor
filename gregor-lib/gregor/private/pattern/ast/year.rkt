@@ -26,9 +26,14 @@
     [(Year _ 'cyclic _)   (num-fmt loc (era Y) 1)]
     [(Year _ 'related n)  (num-fmt loc Y n)]))
 
-(define (year-parse ast state ci? loc)
-  (define (parse/era min [max #f])
-    (num-parse ast loc state (parse-state/ year/era) #:min min #:max max))
+(define (year-parse ast next-ast state ci? loc)
+  (define (min->max n)
+    (if (and next-ast (ast-numeric? next-ast))
+        n
+        #f))
+
+  (define (parse/era min)
+    (num-parse ast loc state (parse-state/ year/era) #:min min #:max (min->max min)))
 
   (define (parse/two update)
     (define (wrapped-update str fs y)
@@ -40,24 +45,27 @@
       (parse-state str
                    (set-fields-year/ext fs y)))
 
-    (num-parse ast loc state update #:min min #:neg #t))
-    
+    (num-parse ast loc state update #:min min #:max (min->max min) #:neg #t))
+
   (match ast
     [(Year _ 'normal 2)   (parse/two (parse-state/ year/era))]
     [(Year _ 'normal n)   (parse/era n)]
     [(Year _ 'week 2)     (parse/two parse-state/ignore)]
-    [(Year _ 'week n)     (num-parse ast loc state parse-state/ignore #:min n)]
+    [(Year _ 'week n)     (num-parse ast loc state parse-state/ignore #:min n #:max (min->max n))]
     [(Year _ 'ext n)      (parse/ext n)]
     [(Year _ 'cyclic _)   (parse/era 1)]
     [(Year _ 'related n)  (parse/ext n)]))
 
+(define (year-numeric? ast)
+  #t)
 
 (struct Year Ast (kind min)
   #:transparent
   #:methods gen:ast
   [(define ast-fmt-contract date-provider-contract)
    (define ast-fmt year-fmt)
-   (define ast-parse year-parse)])
+   (define ast-parse year-parse)
+   (define ast-numeric? year-numeric?)])
 
 (define (default-two-digit-year-resolver parsed-year)
   (define current-year (->year (now)))

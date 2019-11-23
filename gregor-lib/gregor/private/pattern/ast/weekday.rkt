@@ -25,28 +25,40 @@
   (match ast
     [(Weekday/Std _ kind size) (l10n-cal loc 'days kind size (->dow t))]))
 
-(define (weekday/loc-parse ast state ci? loc)
+(define (weekday/loc-parse ast next-ast state ci? loc)
   (match ast
     [(Weekday/Loc _ 'numeric n)
      (num-parse ast loc state parse-state/ignore #:min n #:max n #:ok? (between/c 1 7))]
     [(Weekday/Loc _ kind size)
      (sym-parse ast (weekday-trie loc ci? kind size) state parse-state/ignore)]))
 
-(define (weekday/std-parse ast state ci? loc)
+(define (weekday/std-parse ast next-ast state ci? loc)
   (match ast
     [(Weekday/Std _ kind size)
      (sym-parse ast (weekday-trie loc ci? kind size) state parse-state/ignore)]))
+
+(define (weekday/loc-numeric? ast)
+  (match ast
+    [(Weekday/Loc _ 'numeric _) #t]
+    [_ #f]))
+
+(define (weekday/std-numeric? ast)
+  (match ast
+    [(Weekday/Std _ 'numeric _) #t]
+    [_ #f]))
 
 (struct Weekday/Loc Ast (kind size)
   #:transparent
   #:methods gen:ast
   [(define ast-fmt-contract date-provider-contract)
    (define ast-fmt weekday/loc-fmt)
-   (define ast-parse weekday/loc-parse)])
+   (define ast-parse weekday/loc-parse)
+   (define ast-numeric? weekday/loc-numeric?)])
 
 (struct Weekday/Std Ast (kind size)
   #:transparent
   #:methods gen:ast
   [(define ast-fmt-contract date-provider-contract)
    (define ast-fmt weekday/std-fmt)
-   (define ast-parse weekday/std-parse)])
+   (define ast-parse weekday/std-parse)
+   (define ast-numeric? weekday/std-numeric?)])

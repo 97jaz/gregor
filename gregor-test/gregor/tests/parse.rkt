@@ -58,7 +58,8 @@
          (parameterize ([current-two-digit-year-resolver (λ (y) (+ y 1700))])
            (check-equal? (->year (parse-date "56" "yy")) 1756))
 
-         (check-equal? (->year (parse-date "02000" "yyyyy")) 2000))
+         (check-equal? (->year (parse-date "02000" "yyyyy")) 2000)
+         (check-equal? (parse-date "20191115" "yyyyMMdd") (date 2019 11 15)))
 
        (test-suite "[Y]"
          ;; Week-based year does not contribute to parse data.
@@ -70,13 +71,15 @@
 
          (check-equal? (->year (parse-date "2005-01-01 / ISO 04" "uuuu-MM-dd / 'ISO' YY")) 2005)
          (check-equal? (->year (parse-date "532020" "wwy")) 2020)
+         (check-equal? (->year (parse-date "1900 202020" "u YYYYww")) 1900)
          (check-equal? (->year (parse-date "52020" "Wy")) 2020))
 
        (test-suite "[u]"
          (check-equal? (->year (parse-date "2000" "u")) 2000)
          (check-equal? (->year (parse-date "9000" "uu")) 9000) ; no special case
          (check-equal? (->year (parse-date "02000" "uuuuu")) 2000)
-         (check-equal? (->year (parse-date "-2000" "u")) -2000))
+         (check-equal? (->year (parse-date "-2000" "u")) -2000)
+         (check-equal? (parse-date "20191115" "uuuuMMdd") (date 2019 11 15)))
 
        (test-suite "[U]"
          ;; like y without special case for UU

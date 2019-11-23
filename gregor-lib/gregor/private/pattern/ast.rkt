@@ -12,7 +12,8 @@
 (define-generics ast
   (ast-fmt-contract ast)
   (ast-fmt ast t loc)
-  (ast-parse ast state ci? loc))
+  (ast-parse ast next-ast state ci? loc)
+  (ast-numeric? ast))
 
 (struct Ast (pat))
 
@@ -23,5 +24,3 @@
 (define (parse-error ast state)
   (raise-parse-error (Ast-pat ast)
                      (parse-state-input state)))
-
-  

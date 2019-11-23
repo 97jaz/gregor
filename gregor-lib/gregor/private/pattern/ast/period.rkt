@@ -15,7 +15,7 @@
   (match ast
     [(Period _ size) (l10n-cal loc 'dayPeriods 'format size p)]))
 
-(define (period-parse ast state ci? loc)
+(define (period-parse ast next-ast state ci? loc)
   (match ast
     [(Period _ size)
      (sym-parse ast (period-trie loc ci? size) state
@@ -24,9 +24,13 @@
                     [(am pm) (parse-state str (struct-copy fields fs [period sym]))]
                     [else (parse-error ast state)])))]))
 
+(define (period-numeric? ast)
+  #f)
+
 (struct Period Ast (size)
   #:transparent
   #:methods gen:ast
   [(define ast-fmt-contract time-provider-contract)
    (define ast-fmt period-fmt)
-   (define ast-parse period-parse)])
+   (define ast-parse period-parse)
+   (define ast-numeric? period-numeric?)])
