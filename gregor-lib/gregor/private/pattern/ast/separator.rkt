@@ -11,6 +11,10 @@
 (define (time-separator-fmt ast t loc)
   (time-separator loc))
 
+(define (time-separator-fmt-compile ast loc)
+  (define v (time-separator loc))
+  (lambda (t) v))
+
 (define (time-separator-parse ast next-ast state ci? loc)
   (define sep (time-separator loc))
   (define re (regexp (string-append "^" (regexp-quote sep))))
@@ -29,5 +33,6 @@
   #:methods gen:ast
   [(define (ast-fmt-contract ast) any/c)
    (define ast-fmt time-separator-fmt)
+   (define ast-fmt-compile time-separator-fmt-compile)
    (define ast-parse time-separator-parse)
    (define ast-numeric? separator-numeric?)])
