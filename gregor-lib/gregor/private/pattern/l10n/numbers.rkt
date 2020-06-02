@@ -9,8 +9,10 @@
          "../parse-state.rkt")
 
 (provide num-fmt
+         num-fmt-compile
          num-parse
          num-string-translate
+         num-string-translate-compile
          num-string-untranslate
          num-re
          number-system-symbols
@@ -20,6 +22,13 @@
   (num-string-translate
    loc
    (~a n #:align 'right #:min-width min-width #:pad-string "0")))
+
+(define (num-fmt-compile loc min-width)
+  (define locale-digits (numeral-string loc))
+  (lambda (n)
+    (define str
+      (~a n #:align 'right #:min-width min-width #:pad-string "0"))
+    (substitute str locale-digits ZERO)))
 
 (define (num-parse ast loc state update #:min min #:max [max #f] #:neg [neg #f] #:ok? [ok? (λ (x) #t)])
   (define input (parse-state-input state))
@@ -41,6 +50,10 @@
 
 (define (num-string-translate loc str)
   (substitute str (numeral-string loc) ZERO))
+
+(define (num-string-translate-compile loc)
+  (lambda (str)
+    (substitute str (numeral-string loc) ZERO)))
 
 (define (num-string-untranslate loc str)
   (substitute str
