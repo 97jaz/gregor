@@ -20,6 +20,10 @@
   (match ast
     [(Second _ n) (num-fmt loc (->seconds t) n)]))
 
+(define (second-fmt-compile ast loc)
+  (match-define (Second _ n) ast)
+  (compose1 (num-fmt-compile loc n) ->seconds))
+
 (define (second-parse ast next-ast state ci? loc)
   (match ast
     [(Second _ n)
@@ -86,6 +90,7 @@
   #:methods gen:ast
   [(define ast-fmt-contract time-provider-contract)
    (define ast-fmt second-fmt)
+   (define ast-fmt-compile second-fmt-compile)
    (define ast-parse second-parse)
    (define ast-numeric? second-numeric?)])
 
