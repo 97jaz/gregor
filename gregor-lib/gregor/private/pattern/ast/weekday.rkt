@@ -22,6 +22,17 @@
     [(Weekday/Loc _ 'numeric n) (num-fmt loc (l10n-cwday loc t) n)]
     [(Weekday/Loc _ kind size)  (l10n-cal loc 'days kind size (->dow t))]))
 
+(define (weekday/loc-fmt-compile ast loc)
+  (match ast
+    [(Weekday/Loc _ 'numeric n)
+     (define fmt (num-fmt-compile loc n))
+     (lambda (t)
+       (fmt (l10n-cwday loc t)))]
+    [(Weekday/Loc _ kind size)
+     (define days (l10n-cal loc 'days kind size))
+     (lambda (t)
+       (cldr-ref days (->dow t)))]))
+
 (define (weekday/std-fmt ast t loc)
   (match ast
     [(Weekday/Std _ kind size) (l10n-cal loc 'days kind size (->dow t))]))
@@ -61,6 +72,7 @@
   #:methods gen:ast
   [(define ast-fmt-contract date-provider-contract)
    (define ast-fmt weekday/loc-fmt)
+   (define ast-fmt-compile weekday/loc-fmt-compile)
    (define ast-parse weekday/loc-parse)
    (define ast-numeric? weekday/loc-numeric?)])
 
