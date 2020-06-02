@@ -11,6 +11,10 @@
   (match ast
     [(Literal _ txt) txt]))
 
+(define (literal-fmt-compile ast loc)
+  (match-define (Literal _ txt) ast)
+  (lambda (t) txt))
+
 (define (literal-parse ast next-ast state ci? loc)
   (match ast
     [(Literal _ txt)
@@ -30,5 +34,6 @@
   #:methods gen:ast
   [(define (ast-fmt-contract ast) any/c)
    (define ast-fmt literal-fmt)
+   (define ast-fmt-compile literal-fmt-compile)
    (define ast-parse literal-parse)
    (define ast-numeric? literal-numeric?)])
