@@ -73,6 +73,13 @@
      
      (num-fmt loc ms n)]))
 
+(define (millisecond-fmt-compile ast loc)
+  (define fmt
+    (match ast
+      [(Millisecond _ n) (num-fmt-compile loc n)]))
+  (lambda (t)
+    (fmt (quotient (time->ns (->time t)) NS/MILLI))))
+
 (define (millisecond-parse ast next-ast state ci? loc)
   (match ast
     [(Millisecond _ n)
@@ -118,5 +125,6 @@
   #:methods gen:ast
   [(define ast-fmt-contract time-provider-contract)
    (define ast-fmt millisecond-fmt)
+   (define ast-fmt-compile millisecond-fmt-compile)
    (define ast-parse millisecond-parse)
    (define ast-numeric? second-numeric?)])
