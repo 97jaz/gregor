@@ -2,6 +2,7 @@
 
 (require racket/contract/base
          racket/match
+         cldr/core
          "../../generics.rkt"
          "../ast.rkt"
          "../parse-state.rkt"
@@ -17,6 +18,16 @@
   (match ast
     [(Month _ 'numeric n) (num-fmt loc m n)]
     [(Month _ kind size)  (l10n-cal loc 'months kind size m)]))
+
+(define (month-fmt-compile ast loc)
+  (define fmt
+    (match ast
+      [(Month _ 'numeric n) (num-fmt-compile loc n)]
+      [(Month _ kind size)
+       (let ([months (l10n-cal loc 'months kind size)])
+         (lambda (m)
+           (cldr-ref months m)))]))
+  (compose1 fmt ->month))
 
 (define (month-parse ast next-ast state ci? loc)
   (match ast
@@ -35,5 +46,6 @@
   #:methods gen:ast
   [(define ast-fmt-contract date-provider-contract)
    (define ast-fmt month-fmt)
+   (define ast-fmt-compile month-fmt-compile)
    (define ast-parse month-parse)
    (define ast-numeric? month-numeric?)])

@@ -2,6 +2,7 @@
 
 (require racket/contract/base
          racket/match
+         cldr/core
          "../../generics.rkt"
          "../ast.rkt"
          "../parse-state.rkt"
@@ -17,6 +18,19 @@
   (match ast
     [(Quarter _ 'numeric n) (num-fmt loc q n)]
     [(Quarter _ kind size)  (l10n-cal loc 'quarters kind size q)]))
+
+(define (quarter-fmt-compile ast loc)
+  (define fmt
+    (match ast
+      [(Quarter _ 'numeric n)
+       (num-fmt-compile loc n)]
+      [(Quarter _ kind size)
+       (define tbl
+         (l10n-cal loc 'quarters kind size))
+       (lambda (q)
+         (cldr-ref tbl q))]))
+  (lambda (t)
+    (fmt (->quarter t))))
 
 (define (quarter-parse ast next-ast state ci? loc)
   (match ast
@@ -35,5 +49,6 @@
   #:methods gen:ast
   [(define ast-fmt-contract date-provider-contract)
    (define ast-fmt quarter-fmt)
+   (define ast-fmt-compile quarter-fmt-compile)
    (define ast-parse quarter-parse)
    (define ast-numeric? quarter-numeric?)])

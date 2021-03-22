@@ -1,6 +1,7 @@
 #lang racket/base
 
 (require racket/match
+         cldr/core
          "../../generics.rkt"
          "../ast.rkt"
          "../parse-state.rkt"
@@ -14,6 +15,13 @@
   
   (match ast
     [(Period _ size) (l10n-cal loc 'dayPeriods 'format size p)]))
+
+(define (period-fmt-compile ast loc)
+  (match-define (Period _ size) ast)
+  (define periods
+    (l10n-cal loc 'dayPeriods 'format size))
+  (lambda (t)
+    (cldr-ref periods (if (< (->hours t) 12) 'am 'pm))))
 
 (define (period-parse ast next-ast state ci? loc)
   (match ast
@@ -32,5 +40,6 @@
   #:methods gen:ast
   [(define ast-fmt-contract time-provider-contract)
    (define ast-fmt period-fmt)
+   (define ast-fmt-compile period-fmt-compile)
    (define ast-parse period-parse)
    (define ast-numeric? period-numeric?)])
