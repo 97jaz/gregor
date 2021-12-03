@@ -49,6 +49,15 @@
      (let ([m (moment 2015 4 12 22 6 33 8026521 #:tz "America/New_York")])
        (check-equal? (iso8601/tzid->moment (moment->iso8601/tzid m)) m)))
 
+   (test-case "posix->moment"
+     (check-equal? (posix->moment 119731017 0)
+                   (moment 1973 10 17 18 36 57 #:tz 0))
+     (check-equal? (posix->moment 1e9 0)
+                   (moment 2001 09 09 01 46 40 #:tz 0))
+     (let ([t 1638492227])
+       (check-true (moment=? (posix->moment t "Antarctica/Troll")
+                             (posix->moment t 0)))))
+
    (test-suite "moment order"
      (let* ([t1 (moment -1000)]
             [t2 (moment 0)]

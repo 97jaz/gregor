@@ -38,6 +38,12 @@
      (let ([dt (datetime 2015 4 13 1 59 30 696210938)])
        (check-equal? (iso8601->datetime (datetime->iso8601 dt)) dt)))
 
+   (test-case "posix->datetime"
+     (check-equal? (posix->datetime 0)
+                   (datetime 1970 01 01))
+     (check-equal? (posix->datetime 2147483648)
+                   (datetime 2038 01 19 03 14 08)))
+
    (test-suite "datetime order"
      (let* ([t1 (datetime 0)]
             [t2 (datetime 12)]

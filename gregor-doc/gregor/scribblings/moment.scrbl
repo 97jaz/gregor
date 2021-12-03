@@ -44,6 +44,17 @@ offset-resolver.
 Returns @racket[#t] if @racket[x] is a @racket[moment]; @racket[#f] otherwise.
 }
 
+@defproc[(posix->moment [posix real?] [tz tz/c (current-timezone)]) moment?]{
+Returns the @racket[moment] corresponding to the given
+@link["http://en.wikipedia.org/wiki/Unix_time"]{POSIX time}, which is the number of
+seconds that have elapsed since 00:00 UTC on January 1, 1970.
+
+@examples[#:eval the-eval
+(posix->moment 0)
+(posix->moment 1e9 "America/New_York")
+(posix->moment 1638490827 "Etc/UTC")
+]}
+
 @defproc[(moment->iso8601 [m moment?]) string?]{
 Returns an ISO 8601 string representation of @racket[m]. Since ISO 8601
 doesn't support IANA time zones, that data is discarded; only the UTC offset

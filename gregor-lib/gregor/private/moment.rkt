@@ -53,7 +53,7 @@
             moment->datetime/local
             moment-in-utc))
 
-(define (posix->moment p z)
+(define (posix->moment p [z (current-timezone)])
   (define-values (off tzid)
     (cond [(string? z)
            (values (tzoffset-utc-seconds (utc-seconds->tzoffset z p)) z)]
@@ -115,7 +115,7 @@
  [moment->tzid           (-> moment? (or/c string? #f))]
  [moment->jd             (-> moment? rational?)]
  [moment->posix          (-> moment? rational?)]
- [posix->moment          (-> rational? tz/c moment?)]
+ [posix->moment          (->* (real?) (tz/c) moment?)]
  [moment-add-nanoseconds (-> moment? exact-integer? moment?)]
  [moment-in-utc          (-> moment? moment?)]
  [timezone-adjust        (-> moment? tz/c moment?)]
