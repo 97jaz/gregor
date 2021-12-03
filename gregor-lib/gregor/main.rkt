@@ -101,6 +101,7 @@
                              #:tz [tz tz/c]
                              #:resolve-offset [resolve offset-resolver/c])
                             [res moment?])]
+ [posix->moment        (->* (real?) (tz/c) moment?)]
  [moment?              (-> any/c boolean?)]
  [moment->iso8601      (-> moment? string?)]
  [moment->iso8601/tzid (-> moment? string?)]
