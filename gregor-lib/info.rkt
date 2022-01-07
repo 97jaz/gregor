@@ -4,7 +4,7 @@
 (define collection 'multi)
 (define deps '("base"
                "data-lib"
-               "memoize"
+               "memoize-lib"
                "parser-tools-lib"
                "tzinfo"
                "cldr-core"
