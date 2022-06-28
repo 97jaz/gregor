@@ -37,7 +37,7 @@
 
    (test-case "-minutes"
      (check-equal? (-minutes (time 0) 121) (time 21 59))
-     (check-equal? (-minutes (datetime 2000 2 29) 1) (datetime 2000 2 28 23 59) 1)
+     (check-equal? (-minutes (datetime 2000 2 29) 1) (datetime 2000 2 28 23 59))
      (check-equal? (-minutes (moment 1970 #:tz "Etc/UTC") -12)
                    (moment 1970 1 1 0 12 #:tz "Etc/UTC"))
      (check-equal? (-minutes (moment 1970 #:tz 0) -12)
@@ -53,7 +53,7 @@
 
    (test-case "-seconds"
      (check-equal? (-seconds (time 0) 121) (time 23 57 59))
-     (check-equal? (-seconds (datetime 2000 2 29) 1) (datetime 2000 2 28 23 59 59) 1)
+     (check-equal? (-seconds (datetime 2000 2 29) 1) (datetime 2000 2 28 23 59 59))
      (check-equal? (-seconds (moment 1970 #:tz "Etc/UTC") -12)
                    (moment 1970 1 1 0 0 12 #:tz "Etc/UTC"))
      (check-equal? (-seconds (moment 1970 #:tz 0) -12)
