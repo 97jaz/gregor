@@ -72,6 +72,9 @@
    Moment
    (λ () (error "Moment cannot have cycles"))))
 
+;; See racket/racket#4967
+(provide deserialize-info:Moment)
+
 (module+ deserialize-info
   (provide deserialize-info:Moment))
 

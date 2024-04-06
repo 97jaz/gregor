@@ -74,6 +74,9 @@
    jd->datetime
    (λ () (error "DateTime cannot have cycles"))))
 
+;; See racket/racket#4967
+(provide deserialize-info:DateTime)
+
 (module+ deserialize-info
   (provide deserialize-info:DateTime))
 

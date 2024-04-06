@@ -87,6 +87,9 @@
    jdn->date
    (λ () (error "Date cannot have cycles"))))
 
+;; See racket/racket#4967
+(provide deserialize-info:Date)
+
 (module+ deserialize-info
   (provide deserialize-info:Date))
 

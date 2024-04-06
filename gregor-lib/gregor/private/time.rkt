@@ -65,6 +65,9 @@
    day-ns->time
    (λ () (error "Time cannot have cycles"))))
 
+;; See racket/racket#4967
+(provide deserialize-info:Time)
+
 (module+ deserialize-info
   (provide deserialize-info:Time))
 
