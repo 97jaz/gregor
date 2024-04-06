@@ -1,13 +1,14 @@
 #lang racket/base
 
-(require racket/contract/base
+(require data/order
+         racket/contract/base
          racket/match
          racket/math
+         racket/runtime-path
          racket/serialize
-         data/order
          "core/compare.rkt"
-         "core/ymd.rkt"
          "core/hmsn.rkt"
+         "core/ymd.rkt"
          "date.rkt"
          "time.rkt")
 
@@ -74,8 +75,8 @@
    jd->datetime
    (λ () (error "DateTime cannot have cycles"))))
 
-;; See racket/racket#4967
-(provide deserialize-info:DateTime)
+;; See 97jaz/gregor#59
+(runtime-require (submod "." deserialize-info))
 
 (module+ deserialize-info
   (provide deserialize-info:DateTime))
