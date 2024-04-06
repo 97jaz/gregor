@@ -2,9 +2,10 @@
 
 (require racket/format
          racket/match
+         racket/runtime-path
          racket/serialize
-         "datetime.rkt"
-         "core/compare.rkt")
+         "core/compare.rkt"
+         "datetime.rkt")
 
 (provide (all-defined-out))
 
@@ -72,8 +73,8 @@
    Moment
    (λ () (error "Moment cannot have cycles"))))
 
-;; See racket/racket#4967
-(provide deserialize-info:Moment)
+;; See 97jaz/gregor#59
+(runtime-require (submod "." deserialize-info))
 
 (module+ deserialize-info
   (provide deserialize-info:Moment))

@@ -1,13 +1,14 @@
 #lang racket/base
 
-(require racket/contract/base
+(require data/order
+         racket/contract/base
          racket/format
          racket/match
+         racket/runtime-path
          racket/serialize
-         data/order
          "core/compare.rkt"
-         "core/structs.rkt"
-         "core/hmsn.rkt")
+         "core/hmsn.rkt"
+         "core/structs.rkt")
 
 (define (time-equal-proc x y _)
   (= (Time-ns x) (Time-ns y)))
@@ -65,8 +66,8 @@
    day-ns->time
    (λ () (error "Time cannot have cycles"))))
 
-;; See racket/racket#4967
-(provide deserialize-info:Time)
+;; See 97jaz/gregor#59
+(runtime-require (submod "." deserialize-info))
 
 (module+ deserialize-info
   (provide deserialize-info:Time))

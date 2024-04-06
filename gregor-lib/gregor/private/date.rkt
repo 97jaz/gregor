@@ -1,10 +1,11 @@
 #lang racket/base
 
-(require racket/contract/base
+(require data/order
+         racket/contract/base
          racket/format
          racket/match
+         racket/runtime-path
          racket/serialize
-         data/order
          "core/compare.rkt"
          "core/structs.rkt"
          "core/ymd.rkt")
@@ -87,8 +88,8 @@
    jdn->date
    (λ () (error "Date cannot have cycles"))))
 
-;; See racket/racket#4967
-(provide deserialize-info:Date)
+;; See 97jaz/gregor#59
+(runtime-require (submod "." deserialize-info))
 
 (module+ deserialize-info
   (provide deserialize-info:Date))
