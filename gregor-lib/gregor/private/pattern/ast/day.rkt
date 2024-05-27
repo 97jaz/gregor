@@ -18,6 +18,18 @@
     [(Day _ 'week/month n) (num-fmt loc (add1 (quotient (sub1 (->day t)) 7)) n)]
     [(Day _ 'jdn n)        (num-fmt loc (->jdn t) n)]))
 
+(define (day-fmt-compile ast loc)
+  (match-define (Day _ type width) ast)
+  (define num-fmt (num-fmt-compile loc width))
+  (define day-value
+    (match type
+      ['month ->day]
+      ['year  ->yday]
+      ['jdn   ->jdn]
+      ['week/month
+        (lambda (t) (add1 (quotient (sub1 (->day t)) 7)))]))
+  (compose1 num-fmt day-value))
+
 (define (day-parse ast next-ast state ci? loc)
   (match ast
     [(Day _ 'month n)
@@ -47,5 +59,6 @@
   #:methods gen:ast
   [(define ast-fmt-contract date-provider-contract)
    (define ast-fmt day-fmt)
+   (define ast-fmt-compile day-fmt-compile)
    (define ast-parse day-parse)
    (define ast-numeric? day-numeric?)])

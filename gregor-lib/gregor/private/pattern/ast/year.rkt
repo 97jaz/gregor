@@ -26,6 +26,27 @@
     [(Year _ 'cyclic _)   (num-fmt loc (era Y) 1)]
     [(Year _ 'related n)  (num-fmt loc Y n)]))
 
+(define (year-fmt-compile ast loc)
+  (define (short y) (remainder y 100))
+  (define (era y) (if (positive? y) y (abs (sub1 y))))
+  (define (wyear t) (l10n-week-based-year loc t))
+  (define num-fmt2 (num-fmt-compile loc 2))
+  (match ast
+    [(Year _ 'normal 2)
+     (compose1 num-fmt2 short era ->year)]
+    [(Year _ 'normal w)
+     (compose1 (num-fmt-compile loc w) era ->year)]
+    [(Year _ 'week 2)
+     (compose1 num-fmt2 short era wyear)]
+    [(Year _ 'week w)
+     (compose1 (num-fmt-compile loc w) era wyear)]
+    [(Year _ 'ext w)
+     (compose1 (num-fmt-compile loc w) ->year)]
+    [(Year _ 'cyclic _)
+     (compose1 (num-fmt-compile loc 1) era ->year)]
+    [(Year _ 'related w)
+     (compose1 (num-fmt-compile loc w) ->year)]))
+
 (define (year-parse ast next-ast state ci? loc)
   (define (min->max n)
     (if (and next-ast (ast-numeric? next-ast))
@@ -64,6 +85,7 @@
   #:methods gen:ast
   [(define ast-fmt-contract date-provider-contract)
    (define ast-fmt year-fmt)
+   (define ast-fmt-compile year-fmt-compile)
    (define ast-parse year-parse)
    (define ast-numeric? year-numeric?)])
 

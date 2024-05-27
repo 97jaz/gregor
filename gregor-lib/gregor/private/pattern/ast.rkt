@@ -12,6 +12,7 @@
 (define-generics ast
   (ast-fmt-contract ast)
   (ast-fmt ast t loc)
+  (ast-fmt-compile ast loc)
   (ast-parse ast next-ast state ci? loc)
   (ast-numeric? ast))
 

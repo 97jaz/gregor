@@ -20,6 +20,10 @@
   (match ast
     [(Second _ n) (num-fmt loc (->seconds t) n)]))
 
+(define (second-fmt-compile ast loc)
+  (match-define (Second _ n) ast)
+  (compose1 (num-fmt-compile loc n) ->seconds))
+
 (define (second-parse ast next-ast state ci? loc)
   (match ast
     [(Second _ n)
@@ -33,6 +37,16 @@
      (num-string-translate
       loc
       (~a nano-str #:align 'left #:width n #:pad-string "0"))]))
+
+(define (second/frac-fmt-compile ast loc)
+  (define fmt (num-string-translate-compile loc))
+  (match ast
+    [(SecondFraction _ n)
+     (lambda (t)
+       (define nano-str
+         (~a (->nanoseconds t) #:align 'right #:width 9 #:pad-string "0"))
+       (fmt
+         (~a nano-str #:align 'left #:width n #:pad-string "0")))]))
 
 (define (second/frac-parse ast next-ast state ci? loc)
   (match ast
@@ -58,6 +72,13 @@
      (define ms (quotient (time->ns (->time t)) NS/MILLI))
      
      (num-fmt loc ms n)]))
+
+(define (millisecond-fmt-compile ast loc)
+  (define fmt
+    (match ast
+      [(Millisecond _ n) (num-fmt-compile loc n)]))
+  (lambda (t)
+    (fmt (quotient (time->ns (->time t)) NS/MILLI))))
 
 (define (millisecond-parse ast next-ast state ci? loc)
   (match ast
@@ -86,6 +107,7 @@
   #:methods gen:ast
   [(define ast-fmt-contract time-provider-contract)
    (define ast-fmt second-fmt)
+   (define ast-fmt-compile second-fmt-compile)
    (define ast-parse second-parse)
    (define ast-numeric? second-numeric?)])
 
@@ -94,6 +116,7 @@
   #:methods gen:ast
   [(define ast-fmt-contract time-provider-contract)
    (define ast-fmt second/frac-fmt)
+   (define ast-fmt-compile second/frac-fmt-compile)
    (define ast-parse second/frac-parse)
    (define ast-numeric? second-numeric?)])
 
@@ -102,5 +125,6 @@
   #:methods gen:ast
   [(define ast-fmt-contract time-provider-contract)
    (define ast-fmt millisecond-fmt)
+   (define ast-fmt-compile millisecond-fmt-compile)
    (define ast-parse millisecond-parse)
    (define ast-numeric? second-numeric?)])

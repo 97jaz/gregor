@@ -27,6 +27,10 @@
     [(Zone _ 'city _)             (zone/city-fmt loc t)]
     [(Zone _ 'generic/loc _)      (zone/generic-loc-fmt loc t)]))
 
+(define (zone-fmt-compile ast loc)
+  (lambda (t)
+    (zone-fmt ast t loc)))
+
 (define (zone-fmt-contract ast)
   (match ast
     [(Zone _ 'iso/basic _)        moment-provider?]
@@ -53,5 +57,6 @@
   #:methods gen:ast
   [(define ast-fmt-contract zone-fmt-contract)
    (define ast-fmt zone-fmt)
+   (define ast-fmt-compile zone-fmt-compile)
    (define ast-parse zone-parse)
    (define ast-numeric? zone-numeric?)])
